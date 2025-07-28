@@ -22,6 +22,17 @@
 			"group": "test",
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "Brain-Forge Completion Demo",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"brain_forge_complete.py"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }
