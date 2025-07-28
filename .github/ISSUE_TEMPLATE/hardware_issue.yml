@@ -1,7 +1,7 @@
 name: Hardware Issue
-description: Report a hardware-related problem
+description: Report hardware-related problems with Brain-Forge
 title: "[HARDWARE] "
-labels: ["hardware", "bug"]
+labels: ["hardware", "bug", "triage", "needs-testing"]
 assignees:
   - hkevin01
 
@@ -9,35 +9,96 @@ body:
   - type: markdown
     attributes:
       value: |
-        Use this template for hardware-specific issues with Brain-Forge.
+        # ⚡ Hardware Issue Report
         
-        This includes problems with OMP helmets, Kernel optical devices, accelerometers, or any other hardware components.
+        Thank you for reporting a hardware-related issue! Hardware problems can be complex, so detailed information helps us diagnose and resolve issues effectively.
+        
+        **Safety First**: If you suspect any safety issues with hardware (overheating, sparks, unusual sounds), please stop using the device immediately and contact support.
+        
+        **Before submitting**, please:
+        - Verify all cables and connections are secure
+        - Check that drivers are up to date
+        - Test with different hardware configurations if possible
+        - Review hardware-specific logs and diagnostics
+
+  - type: checkboxes
+    id: safety-check
+    attributes:
+      label: Safety Verification
+      description: Confirm there are no immediate safety concerns
+      options:
+        - label: I confirm there are no apparent safety issues (overheating, sparks, smoke, unusual sounds)
+          required: true
+        - label: Hardware appears physically undamaged
+          required: true
 
   - type: dropdown
     id: hardware-type
     attributes:
       label: Hardware Type
-      description: Which hardware device is having issues?
+      description: What type of hardware is experiencing issues?
       options:
-        - OMP Helmet (Magnetometer)
-        - Kernel Flow (Optical)
-        - Kernel Flux (Optical)
-        - Accelerometer Array
-        - Multiple Devices
-        - Other Hardware
+        - MEG System (OMP Helmet, sensors)
+        - EEG System (electrodes, amplifiers)
+        - Optical Sensors (NIRs, fNIRS devices)
+        - Accelerometer/Motion Sensors
+        - Kernel Flow System
+        - Stimulation Hardware (TMS, tDCS, etc.)
+        - Recording Hardware (A/D converters, interfaces)
+        - Computing Hardware (specialized computers, GPUs)
+        - Networking Equipment (routers, switches for data transfer)
+        - Power Systems (UPS, power supplies)
+        - Calibration Equipment
+        - Other/Custom Hardware
     validations:
       required: true
 
   - type: textarea
     id: hardware-details
     attributes:
-      label: Hardware Details
-      description: Provide specific details about your hardware
+      label: Hardware Specifications
+      description: Detailed hardware information
       placeholder: |
+        - Device Model: OMP Helmet Gen 2
+        - Serial Number: OMP-2024-001234
+        - Firmware Version: 2.1.4
+        - Driver Version: Brain-Forge-HW v0.8.2
+        - Connection Type: USB 3.0 / Ethernet / Wireless
+        - Channels/Sensors: 306 MEG channels
+        - Acquisition System: Custom DAQ Board v1.2
+        - Calibration Date: 2024-01-15
+        - Warranty Status: Active until 2025-12-31
+      value: |
         - Device Model: 
         - Serial Number: 
         - Firmware Version: 
+        - Driver Version: 
         - Connection Type: 
+        - Channels/Sensors: 
+        - Acquisition System: 
+        - Calibration Date: 
+        - Warranty Status: 
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-category
+    attributes:
+      label: Issue Category
+      description: What type of hardware issue are you experiencing?
+      options:
+        - Connection/Communication (device not detected, intermittent connection)
+        - Data Quality (noise, artifacts, signal loss)
+        - Calibration Problems (drift, inaccurate measurements)
+        - Performance Issues (slow data acquisition, dropped samples)
+        - Driver/Software Interface (driver crashes, API problems)
+        - Physical Hardware (mechanical issues, sensor problems)
+        - Power/Electrical (power supply issues, electrical interference)
+        - Temperature/Environmental (overheating, humidity effects)
+        - Synchronization (timing issues, multiple device sync)
+        - Safety Concerns (potential hazards, unusual behavior)
+        - Installation/Setup (mounting, positioning, configuration)
+        - Other
     validations:
       required: true
 
@@ -45,61 +106,232 @@ body:
     id: issue-description
     attributes:
       label: Issue Description
-      description: Describe the hardware problem you're experiencing
-      placeholder: What is the hardware doing (or not doing)?
+      description: Detailed description of the hardware problem
+      placeholder: |
+        Example: The OMP Helmet is showing intermittent signal loss on channels 45-60. The signals appear normal for 2-3 minutes, then show flat-line readings for 10-15 seconds before returning. This happens approximately every 5 minutes during data acquisition.
     validations:
       required: true
 
   - type: dropdown
-    id: issue-type
+    id: issue-severity
     attributes:
-      label: Issue Type
-      description: What type of hardware issue is this?
+      label: Issue Severity
+      description: How severe is this hardware issue?
       options:
-        - Connection/Communication
-        - Data Quality
-        - Calibration
-        - Performance
-        - Physical Damage
-        - Driver/Software
-        - Other
+        - Critical (Safety concern, complete system failure, data corruption)
+        - High (Device unusable, major functionality lost, experiment blocking)
+        - Medium (Partial functionality, workaround exists, quality impacted)
+        - Low (Minor issue, minimal impact on data quality)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: Issue Frequency
+      description: How often does this issue occur?
+      options:
+        - Always (Every time device is used)
+        - Often (>75% of sessions affected)
+        - Sometimes (25-75% of sessions affected)
+        - Rarely (<25% of sessions affected)
+        - Once (Single occurrence)
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the hardware issue
+      placeholder: |
+        1. Connect OMP Helmet via USB 3.0 to acquisition computer
+        2. Launch Brain-Forge hardware interface
+        3. Initialize device with standard MEG protocol
+        4. Begin data acquisition at 1000Hz sampling rate
+        5. Monitor channels 45-60 for signal quality
+        6. Issue appears after 2-3 minutes of recording
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+        5. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment-details
+    attributes:
+      label: Environment and Setup
+      description: Detailed information about the testing environment
+      placeholder: |
+        Physical Environment:
+        - Location: Shielded MEG room, -80dB isolation
+        - Temperature: 22°C ± 1°C
+        - Humidity: 45% RH
+        - Electromagnetic conditions: Hospital-grade shielding
+        
+        System Configuration:
+        - OS: Ubuntu 22.04 LTS
+        - Computer: Dell Precision 7760, 64GB RAM
+        - Connection: Direct USB 3.0, 2m cable
+        - Power: Dedicated 20A circuit, UPS backup
+        - Other devices: None connected simultaneously
+        
+        Subject Setup:
+        - Head circumference: 58cm
+        - Hair length: Short (<2cm)
+        - Positioning: Standard MEG protocol
+        - Movement: Minimal, well-instructed subject
+      value: |
+        Physical Environment:
+        - Location: 
+        - Temperature: 
+        - Humidity: 
+        - Electromagnetic conditions: 
+        
+        System Configuration:
+        - OS: 
+        - Computer: 
+        - Connection: 
+        - Power: 
+        - Other devices: 
+        
+        Subject Setup:
+        - Head circumference: 
+        - Hair length: 
+        - Positioning: 
+        - Movement: 
     validations:
       required: true
 
   - type: textarea
     id: error-messages
     attributes:
-      label: Error Messages
-      description: Any error messages or diagnostic information
+      label: Error Messages and Diagnostics
+      description: Any error messages, diagnostic output, or log entries
+      placeholder: |
+        Hardware Diagnostics Output:
+        [2024-01-20 14:23:15] WARNING: Channel 045 signal amplitude below threshold
+        [2024-01-20 14:23:15] ERROR: Communication timeout on sensor array 2
+        [2024-01-20 14:23:16] INFO: Attempting sensor reset...
+        [2024-01-20 14:23:17] WARNING: Reset successful, resuming acquisition
+        
+        System Logs:
+        Jan 20 14:23:15 kernel: usb 3-1: device descriptor read/64, error -71
+        Jan 20 14:23:15 kernel: usb 3-1: reset high-speed USB device number 2 using xhci_hcd
       render: shell
 
   - type: textarea
-    id: system-info
+    id: data-quality-details
     attributes:
-      label: System Information
-      description: Information about your system
+      label: Data Quality Information
+      description: Specific details about data quality issues (if applicable)
       placeholder: |
-        - OS: 
-        - Python Version: 
-        - Brain-Forge Version: 
-        - USB/Serial Drivers: 
+        Signal Characteristics:
+        - Affected channels: 45-60 (temporal sensors)
+        - Signal amplitude: Normal (~100fT) → Flat-line (0fT) → Normal
+        - Noise floor: Normal during working periods (~5fT RMS)
+        - Frequency response: Full bandwidth affected during dropouts
+        - Correlation: No correlation with subject movement or external events
+        
+        Data Analysis:
+        - SNR degradation: 40dB → 0dB during dropouts
+        - Artifact patterns: Clean dropouts, no gradual degradation
+        - Recovery time: Instantaneous return to normal levels
+        - Impact on experiments: 15% data loss, analysis still possible
+
+  - type: checkboxes
+    id: troubleshooting-attempted
+    attributes:
+      label: Troubleshooting Steps Attempted
+      description: What troubleshooting have you already tried?
+      options:
+        - label: Checked all physical connections and cables
+        - label: Restarted hardware and software systems
+        - label: Updated drivers and firmware to latest versions
+        - label: Tested with different cables/connections
+        - label: Verified power supply stability and grounding
+        - label: Checked for electromagnetic interference sources
+        - label: Performed hardware diagnostic tests
+        - label: Tested with different computer/OS
+        - label: Contacted hardware vendor support
+        - label: Reviewed hardware documentation and manuals
+        - label: Tested with minimal configuration (fewer channels/lower sampling)
+        - label: Checked system logs and error messages
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Workarounds and Temporary Solutions
+      description: Any workarounds you've found that help mitigate the issue
+      placeholder: |
+        - Reducing sampling rate to 500Hz eliminates the dropouts
+        - Using only channels 1-44 and 61-306 provides stable data
+        - Restarting acquisition every 10 minutes prevents the issue
+        - Different USB port (USB 2.0) shows same issue but less frequent
+
+  - type: dropdown
+    id: impact-on-research
+    attributes:
+      label: Impact on Research
+      description: How is this hardware issue affecting your research?
+      options:
+        - Blocking (Cannot collect any usable data)
+        - Severe (Major data quality issues, experiments compromised)
+        - Moderate (Some data loss, but research can continue)
+        - Minor (Slight quality reduction, minimal research impact)
     validations:
       required: true
 
   - type: textarea
-    id: troubleshooting
+    id: vendor-communication
     attributes:
-      label: Troubleshooting Attempted
-      description: What have you already tried to fix this issue?
+      label: Vendor Communication
+      description: Any communication with hardware vendor or previous support tickets
       placeholder: |
-        - [ ] Restarted device
-        - [ ] Reinstalled drivers
-        - [ ] Checked connections
-        - [ ] Updated firmware
-        - [ ] Other: ___
+        - Previous support ticket: #HW-2024-0156 (resolved issue with channels 1-10)
+        - Vendor response time: Usually 24-48 hours
+        - Known issues: Vendor aware of USB 3.0 timing issues in v2.1.4 firmware
+        - Warranty status: Active, replacement parts available
+        - Last calibration service: January 2024, passed all tests
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency Level
+      description: How urgently do you need this resolved?
+      options:
+        - Critical (Active experiment running, immediate resolution needed)
+        - High (Scheduled experiments this week, resolution needed within days)
+        - Medium (Upcoming experiments, resolution needed within 1-2 weeks)
+        - Low (No immediate experiments, can wait for scheduled maintenance)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: testing-availability
+    attributes:
+      label: Testing and Support Availability
+      description: What assistance can you provide for troubleshooting?
+      options:
+        - label: Available for remote diagnostic sessions
+        - label: Can perform additional tests as requested
+        - label: Can provide hardware for vendor analysis (if needed)
+        - label: Available for on-site support visits
+        - label: Can test firmware/driver updates
+        - label: Can provide additional data samples or logs
 
   - type: textarea
-    id: additional-info
+    id: additional-context
     attributes:
-      label: Additional Information
-      description: Any other relevant information, including photos of hardware setup if applicable
+      label: Additional Context
+      description: Any other relevant information, photos, or documentation
+      placeholder: |
+        - Photos of hardware setup and connections
+        - Oscilloscope traces or signal analysis
+        - Environmental monitoring data
+        - Similar issues reported by other users
+        - Hardware modification history
+        - Maintenance and calibration records

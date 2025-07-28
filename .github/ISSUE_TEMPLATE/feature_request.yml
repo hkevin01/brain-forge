@@ -1,7 +1,7 @@
 name: Feature Request
-description: Suggest an idea for Brain-Forge
+description: Suggest an idea or enhancement for Brain-Forge
 title: "[FEATURE] "
-labels: ["enhancement", "feature-request"]
+labels: ["enhancement", "feature-request", "triage"]
 assignees:
   - hkevin01
 
@@ -9,16 +9,69 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting a new feature for Brain-Forge!
+        # 🚀 Feature Request
         
-        Please search existing issues to make sure this hasn't already been requested.
+        Thank you for suggesting a new feature! Your ideas help make Brain-Forge better for the neuroscience community.
+        
+        **Before submitting**, please:
+        - Search existing feature requests to avoid duplicates
+        - Check if this might be better suited as a plugin/extension
+        - Consider the broader implications for the Brain-Forge ecosystem
 
-  - type: textarea
-    id: feature-summary
+  - type: checkboxes
+    id: pre-submission-checklist
     attributes:
-      label: Feature Summary
-      description: A brief description of the feature you'd like to see
-      placeholder: What would you like to add to Brain-Forge?
+      label: Pre-submission Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I have searched existing feature requests and this is not a duplicate
+          required: true
+        - label: I have checked if this could be implemented as a plugin/extension
+          required: false
+        - label: I have considered the impact on existing Brain-Forge functionality
+          required: false
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you requesting?
+      options:
+        - New Analysis Method (connectivity, signal processing, etc.)
+        - Hardware Support (new devices, drivers)
+        - Visualization Enhancement (plots, brain viewer, real-time display)
+        - API/SDK Enhancement (new endpoints, better integration)
+        - Performance/Optimization (speed, memory, scalability)
+        - User Interface Improvement (CLI, web interface, dashboards)
+        - Data Format Support (new file types, export options)
+        - Machine Learning Feature (new models, training methods)
+        - Documentation/Examples (tutorials, guides, samples)
+        - Development Tools (debugging, testing, profiling)
+        - Integration (external tools, cloud services, databases)
+        - Other/Custom
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Related Component
+      description: Which Brain-Forge component would this feature primarily affect?
+      options:
+        - Data Acquisition (OMP, Kernel, Accelerometer)
+        - Signal Processing (Filtering, Preprocessing)
+        - Brain Mapping (Connectivity, Spatial)
+        - Neural Simulation (Brian2, NEST)
+        - Transfer Learning (Pattern extraction)
+        - Visualization (Real-time plots, Brain viewer)
+        - API (REST, WebSocket, CLI)
+        - Hardware Interface (Drivers, Calibration)
+        - Machine Learning (Models, Training)
+        - Core Infrastructure (Config, Logging)
+        - Documentation
+        - CI/CD or Testing
+        - Cross-cutting (affects multiple components)
+        - New component
     validations:
       required: true
 
@@ -26,8 +79,9 @@ body:
     id: problem-statement
     attributes:
       label: Problem Statement
-      description: What problem does this feature solve?
-      placeholder: Is your feature request related to a problem? Please describe.
+      description: What problem does this feature solve? What's the current limitation?
+      placeholder: |
+        Currently, Brain-Forge doesn't support real-time connectivity analysis during data acquisition, which limits researchers' ability to adapt experiments based on ongoing brain states...
     validations:
       required: true
 
@@ -35,72 +89,218 @@ body:
     id: proposed-solution
     attributes:
       label: Proposed Solution
-      description: A clear and concise description of what you want to happen
-      placeholder: Describe the solution you'd like
-    validations:
-      required: true
-
-  - type: dropdown
-    id: component
-    attributes:
-      label: Component
-      description: Which component would this feature affect?
-      options:
-        - Data Acquisition
-        - Signal Processing
-        - Brain Mapping
-        - Neural Simulation
-        - Visualization
-        - API
-        - Hardware Interface
-        - Machine Learning
-        - Documentation
-        - Other
+      description: Describe your ideal solution in detail
+      placeholder: |
+        Add a real-time connectivity analysis module that:
+        - Computes connectivity metrics in sliding windows
+        - Provides configurable analysis parameters
+        - Sends results via WebSocket API
+        - Integrates with existing visualization system
+      value: |
+        The feature should:
+        - 
+        - 
+        - 
     validations:
       required: true
 
   - type: dropdown
     id: priority
     attributes:
-      label: Priority
-      description: How important is this feature?
+      label: Feature Priority
+      description: How important is this feature to your work?
       options:
-        - Critical (Essential for core functionality)
-        - High (Important for user experience)
-        - Medium (Nice to have)
-        - Low (Minor enhancement)
+        - Critical (Essential for current research, blocking progress)
+        - High (Would significantly improve workflow efficiency)
+        - Medium (Nice to have, would be useful)
+        - Low (Minor improvement, can work without it)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-impact
+    attributes:
+      label: Expected User Impact
+      description: How many users would benefit from this feature?
+      options:
+        - All Brain-Forge users
+        - Most users (>75% would find useful)
+        - Many users (25-75% would use)
+        - Specialized users (specific research domain)
+        - Few users (edge case or niche application)
     validations:
       required: true
 
   - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternative Solutions
-      description: A clear and concise description of any alternative solutions or features you've considered
-      placeholder: Describe alternatives you've considered
-
-  - type: textarea
     id: use-cases
     attributes:
-      label: Use Cases
-      description: Describe specific use cases for this feature
+      label: Use Cases and Examples
+      description: Provide specific examples of how this feature would be used
       placeholder: |
-        1. As a researcher, I want to...
-        2. As a clinician, I need to...
-        3. As a developer, I would like to...
+        Use Case 1: Real-time Neurofeedback
+        - During meditation study, monitor theta/alpha connectivity
+        - Provide feedback when desired connectivity patterns emerge
+        - Adapt stimulus presentation based on brain states
+        
+        Use Case 2: Adaptive Experiments
+        - Monitor attention networks during cognitive tasks
+        - Adjust task difficulty based on connectivity measures
+        - Optimize experimental parameters in real-time
+      value: |
+        Use Case 1: 
+        - 
+        - 
+        
+        Use Case 2:
+        - 
+        - 
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Implementation Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - Simple (minor code changes, existing APIs)
+        - Medium (new module, moderate development effort)
+        - Complex (significant architecture changes, multiple components)
+        - Very Complex (major redesign, extensive testing required)
+        - Unknown/Unsure
+    validations:
+      required: true
 
   - type: textarea
-    id: acceptance-criteria
+    id: technical-requirements
     attributes:
-      label: Acceptance Criteria
-      description: What would need to be implemented for this feature to be considered complete?
+      label: Technical Requirements
+      description: Any specific technical requirements or constraints
       placeholder: |
-        - [ ] Criteria 1
-        - [ ] Criteria 2
-        - [ ] Criteria 3
+        - Must maintain <50ms latency for real-time processing
+        - Should support 300+ channel MEG systems
+        - Needs integration with existing hardware drivers
+        - Must be configurable via API and config files
+        - Should support both Python and CLI interfaces
+
+  - type: textarea
+    id: scientific-background
+    attributes:
+      label: Scientific Background
+      description: Relevant scientific literature or methods this feature would implement
+      placeholder: |
+        This feature would implement methods from:
+        - Bassett & Sporns (2017) "Network neuroscience" Nature Reviews Neuroscience
+        - Real-time connectivity analysis as described in Mullen et al. (2015)
+        - Neurofeedback protocols from deBettencourt et al. (2015) Nature Neuroscience
+
+  - type: textarea
+    id: alternatives-considered
+    attributes:
+      label: Alternatives Considered
+      description: What alternative solutions have you considered?
+      placeholder: |
+        Alternative 1: Using external tools like MNE-Python
+        - Pros: Already exists, well-tested
+        - Cons: Not integrated, slower, less real-time capability
+        
+        Alternative 2: Custom scripting
+        - Pros: Flexible, customizable
+        - Cons: No standardization, hard to maintain, reinventing wheel
+
+  - type: textarea
+    id: mockups-examples
+    attributes:
+      label: Mockups/Examples
+      description: Any mockups, diagrams, or code examples that illustrate the feature
+      placeholder: |
+        ```python
+        # Example API usage
+        rt_analyzer = bf.RealTimeConnectivity(
+            method='plv',
+            window_size=1000,  # ms
+            overlap=500,       # ms
+            frequency_bands={'theta': (4, 8), 'alpha': (8, 12)}
+        )
+        
+        # Connect to data stream
+        rt_analyzer.connect_to_stream('meg_stream')
+        rt_analyzer.on_result(callback_function)
+        rt_analyzer.start()
+        ```
+
+  - type: dropdown
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      description: Would this feature require breaking changes to existing APIs?
+      options:
+        - No breaking changes (fully backward compatible)
+        - Minor breaking changes (small API adjustments)
+        - Major breaking changes (significant API redesign)
+        - Unsure
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: compatibility-requirements
+    attributes:
+      label: Compatibility Requirements
+      description: What compatibility requirements should this feature meet?
+      options:
+        - label: Backward compatibility with existing datasets
+        - label: Cross-platform support (Linux, macOS, Windows)
+        - label: Multiple Python versions (3.9+)
+        - label: Integration with existing hardware drivers
+        - label: API stability for external tools
+        - label: Performance compatibility (no significant slowdown)
+
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: Success Criteria
+      description: How would you measure the success of this feature?
+      placeholder: |
+        - Achieves <50ms processing latency for real-time analysis
+        - Successfully processes 306-channel MEG data in real-time
+        - Integrates seamlessly with existing visualization tools
+        - Provides stable API that external tools can rely on
+        - Receives positive feedback from beta users
+        - Passes all automated tests including performance benchmarks
+
+  - type: dropdown
+    id: timeline
+    attributes:
+      label: Desired Timeline
+      description: When would you ideally like to see this feature implemented?
+      options:
+        - Urgent (within 1 month)
+        - Soon (1-3 months)
+        - Medium-term (3-6 months)
+        - Long-term (6+ months)
+        - No specific timeline
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution-willingness
+    attributes:
+      label: Contribution
+      description: How would you like to contribute to this feature?
+      options:
+        - label: I'd like to implement this feature myself
+        - label: I can provide domain expertise and feedback
+        - label: I can help with testing and validation
+        - label: I can assist with documentation
+        - label: I can provide funding/resources for development
+        - label: I can only provide the idea (no implementation help available)
 
   - type: textarea
     id: additional-context
     attributes:
       label: Additional Context
-      description: Add any other context, mockups, or examples about the feature request here
+      description: Any other relevant information, references, or context
+      placeholder: |
+        - Links to relevant papers or documentation
+        - Similar features in other tools
+        - Specific research requirements
+        - Collaboration opportunities
+        - Related ongoing projects

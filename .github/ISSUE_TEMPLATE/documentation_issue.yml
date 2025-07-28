@@ -1,0 +1,261 @@
+name: Documentation Issue
+description: Report problems or suggest improvements for Brain-Forge documentation
+title: "[DOCS] "
+labels: ["documentation", "triage", "good first issue"]
+assignees:
+  - hkevin01
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 📚 Documentation Issue
+        
+        Thank you for helping improve Brain-Forge documentation! Clear, accurate documentation is essential for the neuroscience research community.
+        
+        **Before submitting**, please:
+        - Check if similar documentation issues already exist
+        - Consider if this might be better as a discussion first
+        - Think about the target audience (beginners, advanced users, developers)
+
+  - type: checkboxes
+    id: pre-submission-checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I have searched existing documentation issues
+          required: true
+        - label: I have checked the current documentation for this topic
+          required: true
+
+  - type: dropdown
+    id: documentation-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs attention?
+      options:
+        - API Reference (function/class documentation)
+        - User Guide/Tutorial (step-by-step instructions)
+        - Installation Guide (setup and configuration)
+        - Hardware Documentation (device setup, calibration)
+        - Scientific Background (methods, algorithms, theory)
+        - Code Examples (sample scripts, notebooks)
+        - Configuration Guide (settings, parameters)
+        - Troubleshooting Guide (common issues, solutions)
+        - Developer Documentation (contributing, architecture)
+        - README/Getting Started (project overview)
+        - FAQ (frequently asked questions)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-category
+    attributes:
+      label: Issue Category
+      description: What kind of documentation issue is this?
+      options:
+        - Missing Documentation (topic not covered)
+        - Incorrect Information (factual errors, outdated content)
+        - Unclear/Confusing (hard to understand, poorly explained)
+        - Incomplete (partial information, missing details)
+        - Outdated (needs updating for current version)
+        - Poor Organization (structure issues, hard to find)
+        - Missing Examples (needs code samples, use cases)
+        - Formatting Issues (rendering problems, broken links)
+        - Translation Needed (language accessibility)
+        - Accessibility Issues (screen readers, visual impairments)
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-documentation
+    attributes:
+      label: Affected Documentation
+      description: Which specific documentation is affected?
+      placeholder: |
+        - File/Page: docs/api/connectivity.md
+        - Section: "Real-time Analysis"
+        - URL: https://brain-forge.readthedocs.io/en/latest/connectivity.html#real-time
+        - Function/Class: brain_forge.connectivity.RealTimeConnectivity
+        - Line numbers: 45-67 (if applicable)
+      value: |
+        - File/Page: 
+        - Section: 
+        - URL: 
+        - Function/Class: 
+        - Line numbers: 
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description
+      description: Detailed description of the documentation problem
+      placeholder: |
+        The documentation for RealTimeConnectivity class doesn't explain how to set up the callback function for handling results. The example shows `rt_analyzer.on_result(callback_function)` but doesn't define what the callback function should look like or what parameters it receives.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-level
+    attributes:
+      label: Target User Level
+      description: What user level is most affected by this documentation issue?
+      options:
+        - Beginner (new to Brain-Forge and neuroscience computing)
+        - Intermediate (familiar with neuroscience, learning Brain-Forge)
+        - Advanced (experienced Brain-Forge users)
+        - Developer (contributing to Brain-Forge)
+        - All levels
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-documentation
+    attributes:
+      label: Expected Documentation
+      description: What should the documentation include or how should it be improved?
+      placeholder: |
+        The documentation should include:
+        1. Clear definition of callback function signature
+        2. Example callback function implementation
+        3. Description of the result object structure
+        4. Error handling examples
+        5. Performance considerations for real-time processing
+      value: |
+        The documentation should include:
+        1. 
+        2. 
+        3. 
+        4. 
+        5. 
+
+  - type: textarea
+    id: suggested-content
+    attributes:
+      label: Suggested Content
+      description: If you have specific content suggestions, please provide them
+      placeholder: |
+        ```python
+        def connectivity_callback(result):
+            """
+            Callback function for real-time connectivity results.
+            
+            Parameters:
+            -----------
+            result : dict
+                Dictionary containing:
+                - 'connectivity_matrix': numpy.ndarray, shape (n_channels, n_channels)
+                - 'timestamp': float, Unix timestamp of the analysis window
+                - 'frequency_band': str, analyzed frequency band
+                - 'method': str, connectivity method used
+                - 'window_info': dict, information about the analysis window
+            """
+            print(f"Received connectivity result at {result['timestamp']}")
+            # Process the connectivity matrix
+            conn_matrix = result['connectivity_matrix']
+            # Your analysis code here...
+        
+        # Usage example
+        rt_analyzer = bf.RealTimeConnectivity(method='plv')
+        rt_analyzer.on_result(connectivity_callback)
+        ```
+
+  - type: textarea
+    id: current-confusion
+    attributes:
+      label: Current User Confusion
+      description: What specific confusion or problems do users experience with the current documentation?
+      placeholder: |
+        - Users don't know what parameters the callback function should accept
+        - No clear examples of how to handle errors in the callback
+        - Unclear what the result object contains
+        - No guidance on performance implications of different callback implementations
+        - Missing information about thread safety in callbacks
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Documentation Priority
+      description: How important is fixing this documentation issue?
+      options:
+        - Critical (Blocking users, causing major confusion)
+        - High (Affecting many users, important feature poorly documented)
+        - Medium (Useful improvement, moderate user impact)
+        - Low (Nice to have, minor improvement)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: related-areas
+    attributes:
+      label: Related Documentation Areas
+      description: What other documentation areas might be related or need similar updates?
+      options:
+        - label: API reference documentation
+        - label: User tutorials and guides
+        - label: Code examples and notebooks
+        - label: Installation and setup guides
+        - label: Configuration documentation
+        - label: Troubleshooting guides
+        - label: Developer documentation
+        - label: Scientific background and methods
+        - label: Hardware integration guides
+        - label: Performance and optimization guides
+
+  - type: textarea
+    id: user-research
+    attributes:
+      label: User Research Context
+      description: Any information about how users currently struggle with this topic
+      placeholder: |
+        - Forum discussions where users ask about this topic
+        - Support tickets related to this documentation gap
+        - Common misconceptions or errors users make
+        - Feedback from user interviews or surveys
+        - Analytics showing high bounce rates on related pages
+
+  - type: dropdown
+    id: medium-preference
+    attributes:
+      label: Preferred Documentation Medium
+      description: What format would best address this documentation need?
+      options:
+        - Written Guide (detailed text documentation)
+        - Code Examples (annotated code samples)
+        - Video Tutorial (screencast or explanation)
+        - Interactive Tutorial (Jupyter notebook)
+        - Diagram/Flowchart (visual explanation)
+        - FAQ Entry (question and answer format)
+        - API Reference (technical specification)
+        - Multiple formats needed
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution-willingness
+    attributes:
+      label: Contribution
+      description: How would you like to help improve this documentation?
+      options:
+        - label: I can write the documentation content
+        - label: I can provide technical review and feedback
+        - label: I can create code examples
+        - label: I can help with user testing of new documentation
+        - label: I can provide scientific/domain expertise
+        - label: I can only report the issue (no contribution available)
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information, links, or context
+      placeholder: |
+        - Links to related forum discussions
+        - Screenshots of confusing documentation
+        - References to good documentation examples from other projects
+        - User feedback or quotes about the current documentation
+        - Related GitHub issues or pull requests

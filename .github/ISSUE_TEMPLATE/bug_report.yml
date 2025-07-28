@@ -1,7 +1,7 @@
 name: Bug Report
 description: File a bug report to help us improve Brain-Forge
 title: "[BUG] "
-labels: ["bug", "triage"]
+labels: ["bug", "triage", "needs-investigation"]
 assignees:
   - hkevin01
 
@@ -9,16 +9,35 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        # 🐛 Bug Report
         
-        Before submitting, please check if this issue has already been reported.
+        Thanks for taking the time to fill out this bug report! This helps us improve Brain-Forge for everyone.
+        
+        **Before submitting**, please:
+        - Search existing issues to avoid duplicates
+        - Ensure you're using the latest version
+        - Try reproducing the issue in a clean environment
+
+  - type: checkboxes
+    id: pre-submission-checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
+        - label: I am using the latest version of Brain-Forge
+          required: true
+        - label: I have tried reproducing this issue in a clean environment
+          required: false
 
   - type: textarea
     id: bug-description
     attributes:
       label: Bug Description
-      description: A clear and concise description of what the bug is.
-      placeholder: Tell us what happened!
+      description: A clear and concise description of what the bug is
+      placeholder: |
+        Example: When processing MEG data with >200 channels, the system crashes during connectivity analysis...
     validations:
       required: true
 
@@ -26,12 +45,17 @@ body:
     id: reproduction-steps
     attributes:
       label: Steps to Reproduce
-      description: Steps to reproduce the behavior
+      description: Detailed steps to reproduce the behavior
       placeholder: |
-        1. Go to '...'
-        2. Click on '....'
-        3. Scroll down to '....'
-        4. See error
+        1. Load MEG dataset with `brain_forge.load_data('meg_data.fif')`
+        2. Apply preprocessing with `preprocessor.filter(1, 40)`
+        3. Run connectivity analysis with `analyzer.compute_connectivity()`
+        4. System crashes with error message
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
     validations:
       required: true
 
@@ -39,7 +63,8 @@ body:
     id: expected-behavior
     attributes:
       label: Expected Behavior
-      description: A clear and concise description of what you expected to happen.
+      description: What you expected to happen
+      placeholder: The connectivity analysis should complete successfully and return a connectivity matrix
     validations:
       required: true
 
@@ -47,63 +72,177 @@ body:
     id: actual-behavior
     attributes:
       label: Actual Behavior
-      description: A clear and concise description of what actually happened.
+      description: What actually happened
+      placeholder: System crashes with memory error during connectivity computation
     validations:
       required: true
 
   - type: dropdown
     id: component
     attributes:
-      label: Component
-      description: Which component is affected?
+      label: Affected Component
+      description: Which Brain-Forge component is affected?
       options:
-        - Data Acquisition
-        - Signal Processing
-        - Brain Mapping
-        - Neural Simulation
-        - Visualization
-        - API
-        - Hardware Interface
+        - Data Acquisition (OMP, Kernel, Accelerometer)
+        - Signal Processing (Filtering, Preprocessing)
+        - Brain Mapping (Connectivity, Spatial)
+        - Neural Simulation (Brian2, NEST)
+        - Transfer Learning (Pattern extraction)
+        - Visualization (Real-time plots, Brain viewer)
+        - API (REST, WebSocket, CLI)
+        - Hardware Interface (Drivers, Calibration)
+        - Machine Learning (Models, Training)
+        - Core Infrastructure (Config, Logging)
         - Documentation
-        - Other
+        - CI/CD or Testing
+        - Other/Unknown
     validations:
       required: true
 
   - type: dropdown
     id: severity
     attributes:
-      label: Severity
+      label: Bug Severity
       description: How severe is this bug?
       options:
-        - Critical (System crash, data loss)
-        - High (Feature unusable)
-        - Medium (Feature partially working)
-        - Low (Minor issue)
+        - Critical (System crash, data corruption, security vulnerability)
+        - High (Core feature completely broken, major functionality unavailable)
+        - Medium (Feature partially working, workaround exists)
+        - Low (Minor issue, cosmetic problem, edge case)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: Issue Frequency
+      description: How often does this issue occur?
+      options:
+        - Always (100% reproducible)
+        - Often (>75% of the time)
+        - Sometimes (25-75% of the time)
+        - Rarely (<25% of the time)
+        - Only once
     validations:
       required: true
 
   - type: textarea
     id: environment
     attributes:
-      label: Environment
-      description: Please provide your environment details
+      label: Environment Details
+      description: Provide detailed environment information
       placeholder: |
-        - OS: [e.g. Ubuntu 22.04]
-        - Python Version: [e.g. 3.11.0]
-        - Brain-Forge Version: [e.g. 0.1.0]
-        - Hardware: [e.g. OMP Helmet, Kernel Optical]
+        - OS: Ubuntu 22.04 LTS
+        - Python Version: 3.11.0
+        - Brain-Forge Version: 0.2.1
+        - Hardware: OMP Helmet (306 channels), Kernel Flow
+        - Memory: 32GB RAM
+        - CPU: Intel i7-12700K
+        - GPU: NVIDIA RTX 4080 (if using GPU acceleration)
+        - Virtual Environment: conda/venv/system
+      value: |
+        - OS: 
+        - Python Version: 
+        - Brain-Forge Version: 
+        - Hardware: 
+        - Memory: 
+        - CPU: 
+        - GPU: 
+        - Virtual Environment: 
     validations:
       required: true
 
   - type: textarea
-    id: logs
+    id: error-logs
     attributes:
-      label: Error Logs
-      description: Please copy and paste any relevant log output
+      label: Error Logs and Stack Trace
+      description: Please copy and paste any relevant error messages, stack traces, or log output
+      placeholder: |
+        Paste complete error messages and stack traces here...
+        Include any relevant log output from brain_forge.log
       render: shell
+
+  - type: textarea
+    id: minimal-example
+    attributes:
+      label: Minimal Reproducible Example
+      description: Provide the minimal code that reproduces the issue
+      placeholder: |
+        ```python
+        import brain_forge as bf
+        
+        # Minimal code that reproduces the issue
+        data = bf.load_example_data()
+        result = bf.process(data)  # This line causes the bug
+        ```
+      render: python
+
+  - type: textarea
+    id: data-context
+    attributes:
+      label: Data Context
+      description: Information about the data being processed (if relevant)
+      placeholder: |
+        - Data type: MEG/EEG/Optical/Accelerometer
+        - Data size: ~500MB, 306 channels, 10 minutes
+        - Sampling rate: 1000 Hz
+        - File format: .fif/.edf/.mat
+        - Data characteristics: Resting state/Task-based/Simulation
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Workarounds
+      description: Any temporary workarounds you've found
+      placeholder: |
+        - Reducing data size to <200 channels works
+        - Using different connectivity method avoids the crash
+        - Rolling back to version 0.1.9 resolves the issue
+
+  - type: checkboxes
+    id: debugging-attempted
+    attributes:
+      label: Debugging Steps Attempted
+      description: What debugging steps have you already tried?
+      options:
+        - label: Checked logs for additional error information
+        - label: Tried with different datasets/parameters
+        - label: Tested with clean Python environment
+        - label: Verified hardware connections (if hardware-related)
+        - label: Checked system resources (RAM, disk space)
+        - label: Tried different Brain-Forge configuration settings
+        - label: Searched documentation and existing issues
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact on Work
+      description: How is this bug affecting your work?
+      options:
+        - Blocking (Cannot continue work)
+        - High (Significant delay or effort required)
+        - Medium (Some inconvenience but can work around)
+        - Low (Minor annoyance)
+    validations:
+      required: true
 
   - type: textarea
     id: additional-context
     attributes:
       label: Additional Context
-      description: Add any other context about the problem here, including screenshots if applicable.
+      description: Any other relevant information, screenshots, or files
+      placeholder: |
+        - Screenshots of error dialogs
+        - Configuration files (please redact sensitive information)
+        - Related issues or discussions
+        - Scientific context if this affects specific research
+
+  - type: checkboxes
+    id: contribution-willingness
+    attributes:
+      label: Contribution
+      description: Would you be willing to help fix this issue?
+      options:
+        - label: I'd like to work on fixing this bug
+        - label: I can provide additional testing/feedback
+        - label: I can help with documentation updates

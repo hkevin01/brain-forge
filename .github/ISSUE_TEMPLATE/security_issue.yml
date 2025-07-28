@@ -1,0 +1,297 @@
+name: Security Issue
+description: Report security vulnerabilities or concerns in Brain-Forge (CONFIDENTIAL)
+title: "[SECURITY] "
+labels: ["security", "critical", "private"]
+assignees:
+  - hkevin01
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🔒 Security Issue Report
+        
+        **⚠️ IMPORTANT SECURITY NOTICE ⚠️**
+        
+        Thank you for helping keep Brain-Forge secure! Security issues require special handling to protect users and data.
+        
+        **FOR CRITICAL SECURITY VULNERABILITIES:**
+        - Please email security@brain-forge.org directly instead of using this public issue tracker
+        - Do not disclose details publicly until a fix is available
+        - We aim to respond to security reports within 24 hours
+        
+        **This form is for:**
+        - Security improvements and hardening suggestions
+        - Non-critical security concerns
+        - Security questions about Brain-Forge practices
+        - Privacy-related issues
+        
+        **Medical Data Protection:** Brain-Forge handles sensitive neuroscience data. Security issues may affect patient privacy and research data integrity.
+
+  - type: checkboxes
+    id: confidentiality-check
+    attributes:
+      label: Confidentiality Assessment
+      description: Please assess the sensitivity of this security issue
+      options:
+        - label: This is NOT a critical vulnerability that could immediately compromise systems or data
+          required: true
+        - label: I understand that critical vulnerabilities should be reported via email to security@brain-forge.org
+          required: true
+        - label: I confirm this report does not contain sensitive details that could be exploited
+          required: true
+
+  - type: dropdown
+    id: security-category
+    attributes:
+      label: Security Category
+      description: What type of security issue are you reporting?
+      options:
+        - Authentication/Authorization (login, permissions, access control)
+        - Data Protection (encryption, data handling, privacy)
+        - Network Security (communication, protocols, transmission)
+        - Input Validation (injection attacks, malformed data)
+        - Session Management (tokens, cookies, session handling)
+        - Configuration Security (default settings, hardening)
+        - Dependency/Supply Chain (vulnerable libraries, packages)
+        - Medical Data Privacy (HIPAA, patient data protection)
+        - Research Data Security (study data, participant information)
+        - Infrastructure Security (deployment, server configuration)
+        - API Security (REST endpoints, WebSocket connections)
+        - Hardware Security (device access, firmware security)
+        - Logging/Monitoring (security event logging)
+        - Other/General Security Concern
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity-assessment
+    attributes:
+      label: Severity Assessment
+      description: How would you rate the severity of this security issue?
+      options:
+        - Low (Information disclosure, minor security improvement)
+        - Medium (Potential for limited data exposure or system access)
+        - High (Significant security weakness, but exploitation requires specific conditions)
+        - Critical (Immediate risk to systems or sensitive data - should use email reporting)
+    validations:
+      required: true
+
+  - type: textarea
+    id: security-issue-description
+    attributes:
+      label: Security Issue Description
+      description: Describe the security concern (avoid including sensitive exploitation details)
+      placeholder: |
+        The Brain-Forge API endpoints do not implement rate limiting, which could allow abuse through excessive requests. This could impact system availability and potentially be used for denial of service attacks against research infrastructure.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-component
+    attributes:
+      label: Affected Component
+      description: Which Brain-Forge component is affected by this security issue?
+      options:
+        - Web API (REST endpoints, authentication)
+        - WebSocket Services (real-time data streaming)
+        - Data Storage (databases, file systems)
+        - Hardware Interface (device drivers, communication)
+        - User Authentication (login, user management)
+        - Data Processing Pipeline (analysis, computation)
+        - Configuration System (settings, parameters)
+        - Logging/Monitoring (audit trails, system logs)
+        - Installation/Deployment (setup scripts, containers)
+        - Documentation (security guidance, best practices)
+        - Third-party Integrations (external services, APIs)
+        - Multiple Components
+        - Unknown/Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact-assessment
+    attributes:
+      label: Impact Assessment
+      description: What could be the potential impact if this security issue is exploited?
+      placeholder: |
+        Potential Impact:
+        - System availability could be degraded through resource exhaustion
+        - Research experiments might be interrupted by service denial
+        - Legitimate users could be prevented from accessing the system
+        - Server resources could be consumed, affecting other services
+        - No direct data breach risk, but operational impact on research
+
+  - type: dropdown
+    id: data-sensitivity
+    attributes:
+      label: Data Sensitivity Level
+      description: What level of sensitive data could be affected?
+      options:
+        - No Sensitive Data (public information, system logs)
+        - Research Data (non-identifiable scientific data)
+        - Participant Data (potentially identifiable research subjects)
+        - Medical Data (patient information, clinical data)
+        - System Credentials (passwords, API keys, certificates)
+        - Infrastructure Data (server configs, network topology)
+        - Multiple Data Types
+        - Unknown/Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: General Reproduction Information
+      description: General steps to observe this security issue (avoid detailed exploitation instructions)
+      placeholder: |
+        General observation steps:
+        1. Access the Brain-Forge API endpoint documentation
+        2. Note the absence of rate limiting documentation
+        3. Observe that endpoints accept unlimited requests per minute
+        4. Check system monitoring during high request volumes
+        5. Notice potential for resource exhaustion
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+        5. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-versions
+    attributes:
+      label: Affected Versions
+      description: Which versions of Brain-Forge are affected?
+      placeholder: |
+        - Tested Version: Brain-Forge v0.2.1
+        - Likely Affected: All versions since v0.1.0
+        - Platform: Linux, Docker deployment
+        - Configuration: Default settings, standard deployment
+
+  - type: checkboxes
+    id: compliance-concerns
+    attributes:
+      label: Compliance and Regulatory Concerns
+      description: Are there potential compliance implications?
+      options:
+        - label: HIPAA compliance (medical data protection)
+        - label: GDPR compliance (EU data protection)
+        - label: IRB/Ethics requirements (research participant protection)
+        - label: Institution security policies
+        - label: Grant/funding security requirements
+        - label: International data transfer regulations
+        - label: Medical device regulations (if applicable)
+        - label: No specific compliance concerns identified
+
+  - type: textarea
+    id: security-research-context
+    attributes:
+      label: Research Context
+      description: How might this security issue affect neuroscience research specifically?
+      placeholder: |
+        Research Impact:
+        - Multi-site studies could be disrupted by service unavailability
+        - Real-time experiments might fail during critical data collection
+        - Long-term longitudinal studies could lose continuity
+        - Participant scheduling and data collection could be affected
+        - Collaborative research projects might experience coordination issues
+
+  - type: textarea
+    id: mitigation-suggestions
+    attributes:
+      label: Suggested Mitigations
+      description: Any suggestions for addressing this security issue?
+      placeholder: |
+        Suggested mitigations:
+        - Implement rate limiting on API endpoints (e.g., 100 requests/minute per user)
+        - Add request throttling with exponential backoff
+        - Implement monitoring and alerting for unusual request patterns
+        - Consider implementing API authentication tokens with usage limits
+        - Add documentation about API usage best practices
+
+  - type: dropdown
+    id: discovery-method
+    attributes:
+      label: Discovery Method
+      description: How was this security issue discovered?
+      options:
+        - Security Review/Audit (planned security assessment)
+        - Penetration Testing (authorized security testing)
+        - Code Review (manual or automated code analysis)
+        - User Report (reported by Brain-Forge user)
+        - Incident Response (discovered during security incident)
+        - Research (academic or independent security research)
+        - Automated Scanning (security tools, vulnerability scanners)
+        - Documentation Review (found in specifications or docs)
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: testing-environment
+    attributes:
+      label: Testing Environment
+      description: In what environment was this security issue observed?
+      options:
+        - label: Production system (live research environment)
+        - label: Staging/Test environment (pre-production testing)
+        - label: Local development environment
+        - label: Isolated security testing environment
+        - label: Academic/Research testing setup
+        - label: Simulated environment (not real Brain-Forge instance)
+
+  - type: dropdown
+    id: public-disclosure
+    attributes:
+      label: Public Disclosure Timeline
+      description: When would appropriate public disclosure be acceptable?
+      options:
+        - Immediate (this is not a sensitive security issue)
+        - After Fix (wait until security patch is available)
+        - Coordinated Disclosure (90 days or after fix, whichever comes first)
+        - Extended Timeline (sensitive issue requiring longer fix timeline)
+        - No Public Disclosure (should remain confidential)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: responsible-disclosure
+    attributes:
+      label: Responsible Disclosure Commitment
+      description: Please confirm your commitment to responsible disclosure
+      options:
+        - label: I will not publicly disclose sensitive details until appropriate
+          required: true
+        - label: I will not exploit this issue maliciously
+          required: true
+        - label: I am willing to work with the Brain-Forge team on resolution
+          required: true
+        - label: I understand that security fixes may take time to implement properly
+          required: true
+
+  - type: textarea
+    id: contact-information
+    attributes:
+      label: Secure Contact Information
+      description: How can we securely contact you about this issue? (Optional)
+      placeholder: |
+        - Encrypted email: your-email@example.com (PGP key ID: 0x1234567890ABCDEF)
+        - Signal: +1-555-123-4567
+        - Preferred contact method: Email
+        - Best time to contact: Weekdays 9-5 EST
+        - Public key fingerprint: (if using PGP encryption)
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant security context or information
+      placeholder: |
+        - Related security issues or CVEs
+        - Similar issues in other neuroscience platforms
+        - Relevant security research or publications
+        - Organizational security requirements
+        - Previous communication about this issue
