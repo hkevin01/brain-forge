@@ -5,7 +5,7 @@ This module defines all custom exceptions used throughout the Brain-Forge system
 providing specific error types for different components and failure modes.
 """
 
-from typing import Optional, Any, Dict
+from typing import Optional, Any, Dict, List
 
 
 class BrainForgeError(Exception):
@@ -54,12 +54,40 @@ class HardwareError(BrainForgeError):
 
 class DeviceConnectionError(HardwareError):
     """Device connection and communication failures"""
-    pass
+    
+    def __init__(self, message: str, device_type: Optional[str] = None,
+                 connection_type: Optional[str] = None, **kwargs):
+        """
+        Initialize device connection error
+        
+        Args:
+            message: Error message
+            device_type: Type of device (omp, kernel, accel)
+            connection_type: Connection method (usb, wireless, ethernet)
+        """
+        super().__init__(message, device_type=device_type, **kwargs)
+        self.connection_type = connection_type
 
 
 class DeviceCalibrationError(HardwareError):
     """Device calibration failures"""
-    pass
+    
+    def __init__(self, message: str, calibration_type: Optional[str] = None,
+                 expected_value: Optional[float] = None,
+                 actual_value: Optional[float] = None, **kwargs):
+        """
+        Initialize device calibration error
+        
+        Args:
+            message: Error message
+            calibration_type: Type of calibration (gain, offset, noise)
+            expected_value: Expected calibration value
+            actual_value: Actual measured value
+        """
+        super().__init__(message, **kwargs)
+        self.calibration_type = calibration_type
+        self.expected_value = expected_value
+        self.actual_value = actual_value
 
 
 class SensorError(HardwareError):
@@ -98,12 +126,38 @@ class StreamingError(BrainForgeError):
 
 class BufferOverflowError(StreamingError):
     """Data buffer overflow errors"""
-    pass
+    
+    def __init__(self, message: str, buffer_size: Optional[int] = None,
+                 overflow_amount: Optional[int] = None, **kwargs):
+        """
+        Initialize buffer overflow error
+        
+        Args:
+            message: Error message
+            buffer_size: Maximum buffer capacity
+            overflow_amount: Amount of data that caused overflow
+        """
+        super().__init__(message, **kwargs)
+        self.buffer_size = buffer_size
+        self.overflow_amount = overflow_amount
 
 
 class SynchronizationError(StreamingError):
     """Multi-device synchronization errors"""
-    pass
+    
+    def __init__(self, message: str, devices: Optional[List[str]] = None,
+                 time_offset: Optional[float] = None, **kwargs):
+        """
+        Initialize synchronization error
+        
+        Args:
+            message: Error message
+            devices: List of devices that lost sync
+            time_offset: Time offset in seconds
+        """
+        super().__init__(message, **kwargs)
+        self.devices = devices or []
+        self.time_offset = time_offset
 
 
 class ProcessingError(BrainForgeError):
@@ -124,22 +178,74 @@ class ProcessingError(BrainForgeError):
 
 class FilteringError(ProcessingError):
     """Digital filtering errors"""
-    pass
+    
+    def __init__(self, message: str, filter_type: Optional[str] = None,
+                 cutoff_freq: Optional[float] = None, **kwargs):
+        """
+        Initialize filtering error
+        
+        Args:
+            message: Error message
+            filter_type: Type of filter (lowpass, highpass, bandpass)
+            cutoff_freq: Filter cutoff frequency
+        """
+        super().__init__(message, **kwargs)
+        self.filter_type = filter_type
+        self.cutoff_freq = cutoff_freq
 
 
 class CompressionError(ProcessingError):
     """Data compression errors"""
-    pass
+    
+    def __init__(self, message: str, compression_algorithm: Optional[str] = None,
+                 compression_ratio: Optional[float] = None, **kwargs):
+        """
+        Initialize compression error
+        
+        Args:
+            message: Error message
+            compression_algorithm: Algorithm used (wavelet, neural_lz, etc.)
+            compression_ratio: Target compression ratio
+        """
+        super().__init__(message, **kwargs)
+        self.compression_algorithm = compression_algorithm
+        self.compression_ratio = compression_ratio
 
 
 class FeatureExtractionError(ProcessingError):
     """Feature extraction errors"""
-    pass
+    
+    def __init__(self, message: str, feature_type: Optional[str] = None,
+                 extraction_method: Optional[str] = None, **kwargs):
+        """
+        Initialize feature extraction error
+        
+        Args:
+            message: Error message
+            feature_type: Type of feature (spectral, temporal, spatial)
+            extraction_method: Method used (PCA, ICA, transformers)
+        """
+        super().__init__(message, **kwargs)
+        self.feature_type = feature_type
+        self.extraction_method = extraction_method
 
 
 class ArtifactRemovalError(ProcessingError):
     """Artifact removal errors"""
-    pass
+    
+    def __init__(self, message: str, artifact_type: Optional[str] = None,
+                 removal_method: Optional[str] = None, **kwargs):
+        """
+        Initialize artifact removal error
+        
+        Args:
+            message: Error message
+            artifact_type: Type of artifact (motion, eye, muscle)
+            removal_method: Method used (ICA, regression, filtering)
+        """
+        super().__init__(message, **kwargs)
+        self.artifact_type = artifact_type
+        self.removal_method = removal_method
 
 
 class ConfigurationError(BrainForgeError):
@@ -212,7 +318,20 @@ class ModelError(BrainForgeError):
 
 class VisualizationError(BrainForgeError):
     """Visualization and plotting errors"""
-    pass
+    
+    def __init__(self, message: str, plot_type: Optional[str] = None,
+                 rendering_backend: Optional[str] = None, **kwargs):
+        """
+        Initialize visualization error
+        
+        Args:
+            message: Error message
+            plot_type: Type of plot (3d_brain, connectivity, time_series)
+            rendering_backend: Backend used (mayavi, plotly, matplotlib)
+        """
+        super().__init__(message, **kwargs)
+        self.plot_type = plot_type
+        self.rendering_backend = rendering_backend
 
 
 class StorageError(BrainForgeError):
@@ -253,12 +372,38 @@ class APIError(BrainForgeError):
 
 class AuthenticationError(APIError):
     """Authentication and authorization errors"""
-    pass
+    
+    def __init__(self, message: str, auth_method: Optional[str] = None,
+                 user_id: Optional[str] = None, **kwargs):
+        """
+        Initialize authentication error
+        
+        Args:
+            message: Error message
+            auth_method: Authentication method (token, basic, oauth)
+            user_id: User identifier if available
+        """
+        super().__init__(message, **kwargs)
+        self.auth_method = auth_method
+        self.user_id = user_id
 
 
 class RateLimitError(APIError):
     """API rate limiting errors"""
-    pass
+    
+    def __init__(self, message: str, limit: Optional[int] = None,
+                 retry_after: Optional[int] = None, **kwargs):
+        """
+        Initialize rate limit error
+        
+        Args:
+            message: Error message
+            limit: Rate limit (requests per time period)
+            retry_after: Seconds to wait before retry
+        """
+        super().__init__(message, **kwargs)
+        self.limit = limit
+        self.retry_after = retry_after
 
 
 class TimeoutError(BrainForgeError):
