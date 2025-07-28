@@ -107,7 +107,7 @@ To create the world's most advanced brain scanning and simulation platform that 
   
 - [ ] **Compression Optimization**
   - Adaptive compression based on signal characteristics
-  - GPU acceleration using CuPy/CUDA
+  - GPU acceleration using CuPy/CUDA/ROCm/HIP
   - Real-time performance optimization
 
 **Phase 2 Deliverables:**
