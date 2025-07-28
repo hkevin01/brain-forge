@@ -11,19 +11,23 @@ import numpy as np
 from datetime import datetime
 import time
 
+
 def print_header(title: str):
     """Print formatted section header"""
     print(f"\n{'=' * 60}")
     print(f"🧠 {title}")
     print(f"{'=' * 60}")
 
+
 def print_success(message: str):
     """Print success message"""
     print(f"   ✅ {message}")
 
+
 def print_info(message: str):
     """Print info message"""
     print(f"   📊 {message}")
+
 
 def demonstrate_core_infrastructure():
     """Demonstrate core infrastructure capabilities"""
@@ -54,7 +58,8 @@ def demonstrate_core_infrastructure():
         }
     }
     
-    print_success("Comprehensive configuration system with dataclass structure")
+    print_success("Comprehensive configuration system with "
+                  "dataclass structure")
     print_info(f"Hardware config: {len(config['hardware'])} parameters")
     print_info(f"Processing config: {len(config['processing'])} parameters")
     print_info("Transfer learning config with frequency band definitions")
@@ -70,6 +75,7 @@ def demonstrate_core_infrastructure():
     print_success("Structured logging with performance metrics")
     print_success("Contextual information and debugging support")
     print_success("Multiple log levels and output formats")
+
 
 def demonstrate_hardware_integration():
     """Demonstrate hardware integration capabilities"""
@@ -103,6 +109,7 @@ def demonstrate_hardware_integration():
     print_success("Real-time buffer management")
     print_info("Synchronization accuracy: ±10μs")
 
+
 def demonstrate_processing_pipeline():
     """Demonstrate signal processing capabilities"""
     print_header("ADVANCED PROCESSING PIPELINE DEMONSTRATION")
@@ -112,17 +119,20 @@ def demonstrate_processing_pipeline():
     neural_data = np.random.randn(channels, timepoints, trials) * 10
     
     # Add realistic brain signals
-    fs = 1000
     t = np.linspace(0, 1, timepoints, False)
     for ch in range(min(64, channels)):
         for trial in range(trials):
             # Alpha rhythm
             alpha_freq = 8 + 4 * np.random.random()
-            neural_data[ch, :, trial] += 50 * np.sin(2 * np.pi * alpha_freq * t)
+            neural_data[ch, :, trial] += (
+                50 * np.sin(2 * np.pi * alpha_freq * t)
+            )
             
             # Beta rhythm
             beta_freq = 12 + 18 * np.random.random()
-            neural_data[ch, :, trial] += 30 * np.sin(2 * np.pi * beta_freq * t)
+            neural_data[ch, :, trial] += (
+                30 * np.sin(2 * np.pi * beta_freq * t)
+            )
     
     print("🔄 Real-time Processing Pipeline:")
     start_time = time.time()
@@ -152,13 +162,15 @@ def demonstrate_processing_pipeline():
     # Feature extraction
     print("\n🎯 Feature Extraction:")
     spectral_features = np.mean(np.abs(filtered_data)**2, axis=1)
-    connectivity_matrix = np.corrcoef(filtered_data[:64, :, 0])  # Sample connectivity
+    # Sample connectivity
+    connectivity_matrix = np.corrcoef(filtered_data[:64, :, 0])
     
     print_success("Spectral power analysis across frequency bands")
     print_success("Connectivity matrix computation")
     print_success("Spatial pattern recognition")
     print_info(f"Spectral features: {spectral_features.shape}")
     print_info(f"Connectivity matrix: {connectivity_matrix.shape}")
+
 
 def demonstrate_transfer_learning():
     """Demonstrate transfer learning capabilities"""
@@ -174,7 +186,9 @@ def demonstrate_transfer_learning():
     print_success("Pattern quality assessment and validation")
     print_info(f"Extracted patterns: {n_patterns}")
     print_info(f"Average quality: {np.mean(pattern_qualities):.3f}")
-    print_info(f"Quality range: [{pattern_qualities.min():.3f}, {pattern_qualities.max():.3f}]")
+    min_qual = pattern_qualities.min()
+    max_qual = pattern_qualities.max()
+    print_info(f"Quality range: [{min_qual:.3f}, {max_qual:.3f}]")
     
     # Simulate feature mapping
     print("\n🔄 Cross-subject Feature Mapping:")
@@ -199,6 +213,7 @@ def demonstrate_transfer_learning():
     print_info(f"Transfer accuracy: {transfer_accuracy:.3f}")
     print_info(f"Confidence score: {confidence_score:.3f}")
 
+
 def demonstrate_visualization_system():
     """Demonstrate visualization capabilities"""
     print_header("3D VISUALIZATION SYSTEM DEMONSTRATION")
@@ -208,7 +223,7 @@ def demonstrate_visualization_system():
     print_success("Real-time activity overlay on brain models")
     print_success("Interactive brain exploration capabilities")
     print_info("Brain mesh: Harvard-Oxford atlas integration")
-    print_info("Electrode positions: 306 OPM + 96 optical channels")
+    print_info("Electrode positions: 306 OMP + 96 optical channels")
     
     print("\n📊 Real-time Signal Plotting:")
     print_success("Multi-channel signal visualization")
@@ -223,6 +238,7 @@ def demonstrate_visualization_system():
     print_success("ROI-based analysis visualization")
     print_info("Connectivity threshold: Configurable")
     print_info("Network metrics: Real-time computation")
+
 
 def demonstrate_api_system():
     """Demonstrate API capabilities"""
@@ -255,6 +271,7 @@ def demonstrate_api_system():
     print_info("Update rate: 10 Hz")
     print_info("Data format: Multi-channel time series")
 
+
 def demonstrate_validation_framework():
     """Demonstrate validation capabilities"""
     print_header("VALIDATION FRAMEWORK DEMONSTRATION")
@@ -282,6 +299,7 @@ def demonstrate_validation_framework():
     print_success("Hardware integration: Multi-device sync confirmed")
     print_success("Transfer learning: Pattern extraction functional")
 
+
 def show_completion_summary():
     """Show final completion summary"""
     print_header("BRAIN-FORGE COMPLETION SUMMARY")
@@ -306,9 +324,10 @@ def show_completion_summary():
     
     print("\n🏆 PLATFORM CAPABILITIES:")
     capabilities = [
-        "Multi-modal brain data acquisition (306-channel OPM + optical + motion)",
+        "Multi-modal brain data acquisition "
+        "(306-channel OPM + optical + motion)",
         "Real-time signal processing with <100ms latency",
-        "Advanced wavelet compression achieving 5-10x ratios", 
+        "Advanced wavelet compression achieving 5-10x ratios",
         "Cross-subject brain pattern transfer learning",
         "3D brain visualization with activity overlays",
         "RESTful API with WebSocket real-time streaming",
@@ -324,16 +343,17 @@ def show_completion_summary():
     print_success("Real-time brain monitoring and analysis")
     print_success("Cross-subject pattern transfer research")
     
-    print(f"\n⭐ Brain-Forge Platform Development: SUCCESSFULLY COMPLETED!")
+    print("\n⭐ Brain-Forge Platform Development: SUCCESSFULLY COMPLETED!")
     print(f"   Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"   Status: Production Ready")
-    print(f"   Next Step: Execute comprehensive validation and deploy")
+    print("   Status: Production Ready")
+    print("   Next Step: Execute comprehensive validation and deploy")
+
 
 def main():
     """Main demonstration function"""
     print("🧠 BRAIN-FORGE PLATFORM COMPLETION DEMONSTRATION")
     print(f"   Execution Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"   Platform Status: COMPLETE")
+    print("   Platform Status: COMPLETE")
     
     # Run all demonstrations
     demonstrate_core_infrastructure()
@@ -346,6 +366,7 @@ def main():
     show_completion_summary()
     
     return 0
+
 
 if __name__ == '__main__':
     try:

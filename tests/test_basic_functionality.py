@@ -103,7 +103,8 @@ def test_config_structure():
     
     assert config['hardware']['omp_channels'] == 306
     assert config['processing']['compression_ratio'] == 5.0
-    assert config['transfer_learning']['pattern_extraction']['current_subject_id'] == 'test_subject'
+    subject_id = config['transfer_learning']['pattern_extraction']
+    assert subject_id['current_subject_id'] == 'test_subject'
 
 
 if __name__ == '__main__':

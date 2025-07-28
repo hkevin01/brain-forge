@@ -1,0 +1,120 @@
+{
+  "system_info": {
+    "platform": "Linux-6.14.0-24-generic-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "python_version": "3.12.3",
+    "cpu_count": 12,
+    "memory_total_gb": 31.270286560058594,
+    "timestamp": 1753727091.3808284
+  },
+  "benchmark_summary": {
+    "total_benchmarks": 6,
+    "successful": 4,
+    "failed": 2,
+    "success_rate": 66.66666666666666,
+    "total_duration_ms": 2623.402694007382,
+    "total_memory_mb": 42.51171875,
+    "average_duration_ms": 655.8506735018454,
+    "average_memory_mb": 10.6279296875
+  },
+  "individual_results": [
+    {
+      "name": "Data Acquisition Simulation",
+      "duration_ms": 68.96413100184873,
+      "memory_mb": 12.12109375,
+      "cpu_percent": 101.4,
+      "throughput_ops_per_sec": null,
+      "peak_memory_mb": 46.6328125,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "channels": 306,
+        "sampling_rate": 1000,
+        "duration_seconds": 1.0,
+        "data_points": 306000
+      }
+    },
+    {
+      "name": "Real-time Processing Pipeline",
+      "duration_ms": 1050.1631729956716,
+      "memory_mb": 13.78515625,
+      "cpu_percent": 101.4,
+      "throughput_ops_per_sec": null,
+      "peak_memory_mb": 64.4296875,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "processing_latency_ms": 12.5,
+        "filter_stages": 3,
+        "compression_ratio": 5.2
+      }
+    },
+    {
+      "name": "Pattern Transfer Learning",
+      "duration_ms": 1152.6379939960316,
+      "memory_mb": 10.4453125,
+      "cpu_percent": 101.4,
+      "throughput_ops_per_sec": null,
+      "peak_memory_mb": 42.8671875,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "transfer_accuracy": 0.89,
+        "pattern_quality": 0.92,
+        "adaptation_iterations": 25
+      }
+    },
+    {
+      "name": "3D Visualization Rendering",
+      "duration_ms": 251.63641400914825,
+      "memory_mb": 6.1640625,
+      "cpu_percent": 101.4,
+      "throughput_ops_per_sec": null,
+      "peak_memory_mb": 28.5,
+      "success": true,
+      "error_message": null,
+      "metadata": {
+        "rendering_fps": 30,
+        "mesh_vertices": 10000,
+        "texture_resolution": "1024x1024"
+      }
+    },
+    {
+      "name": "API Response Benchmarks",
+      "duration_ms": 100.0,
+      "memory_mb": 0.0,
+      "cpu_percent": 0.0,
+      "throughput_ops_per_sec": null,
+      "peak_memory_mb": 0.0,
+      "success": false,
+      "error_message": "Test not yet implemented",
+      "metadata": {}
+    },
+    {
+      "name": "Concurrent Processing Load",
+      "duration_ms": 100.0,
+      "memory_mb": 0.0,
+      "cpu_percent": 0.0,
+      "throughput_ops_per_sec": null,
+      "peak_memory_mb": 0.0,
+      "success": false,
+      "error_message": "Test not yet implemented",
+      "metadata": {}
+    }
+  ],
+  "performance_thresholds": {
+    "max_processing_latency_ms": 100,
+    "min_compression_ratio": 3.0,
+    "min_transfer_accuracy": 0.8,
+    "max_memory_usage_mb": 1000,
+    "min_rendering_fps": 10
+  },
+  "validation_status": {
+    "processing_latency_ok": true,
+    "compression_ratio_ok": true,
+    "transfer_accuracy_ok": true,
+    "memory_usage_ok": true,
+    "rendering_fps_ok": true,
+    "overall_performance_ok": true
+  }
+}
