@@ -1,0 +1,70 @@
+{
+  "device_type": "accelerometer",
+  "device_name": "Accelerometer Array",
+  "serial_number": "ACCEL-SIM-001",
+  "calibration_date": "2025-07-28T14:27:21.658992",
+  "channel_results": [
+    {
+      "device_name": "Accelerometer Array (X-axis)",
+      "channel_id": 0,
+      "offset": 0.10069449972303864,
+      "gain": 1.3883796970000357,
+      "noise_level": 0.7202640723675809,
+      "snr_db": 117.23389756251522,
+      "frequency_response": {
+        "dc_response": 1.0,
+        "low_freq_3db": 0.1,
+        "high_freq_3db": 500.0,
+        "phase_delay_ms": 0.1
+      },
+      "success": true,
+      "error_message": null,
+      "timestamp": 1753727241.6574502
+    },
+    {
+      "device_name": "Accelerometer Array (Y-axis)",
+      "channel_id": 1,
+      "offset": 0.10069452827105473,
+      "gain": 1.3883796970000357,
+      "noise_level": 0.7202640489500506,
+      "snr_db": 117.23389733273648,
+      "frequency_response": {
+        "dc_response": 1.0,
+        "low_freq_3db": 0.1,
+        "high_freq_3db": 500.0,
+        "phase_delay_ms": 0.1
+      },
+      "success": true,
+      "error_message": null,
+      "timestamp": 1753727241.6582725
+    },
+    {
+      "device_name": "Accelerometer Array (Z-axis)",
+      "channel_id": 2,
+      "offset": 0.10069453261646899,
+      "gain": 1.3883796970000357,
+      "noise_level": 0.720264090639193,
+      "snr_db": 139.94495966324732,
+      "frequency_response": {
+        "dc_response": 1.0,
+        "low_freq_3db": 0.1,
+        "high_freq_3db": 500.0,
+        "phase_delay_ms": 0.1
+      },
+      "success": true,
+      "error_message": null,
+      "timestamp": 1753727241.65893
+    }
+  ],
+  "overall_performance": {
+    "average_snr_db": 124.80425151949969,
+    "average_noise_level": 0.7202640706522748,
+    "offset_stability": 1.4590139776540816e-08,
+    "gain_uniformity": 0.0,
+    "successful_channels": 3,
+    "total_channels": 3,
+    "success_rate": 100.0
+  },
+  "success": true,
+  "notes": "Accelerometer calibration: 3/3 axes"
+}
