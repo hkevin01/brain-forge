@@ -1,0 +1,27 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Brain-Forge Validation",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"validate_brain_forge.py"
+			],
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Basic Functionality Test",
+			"type": "shell", 
+			"command": "python3",
+			"args": [
+				"test_basic_functionality.py"
+			],
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

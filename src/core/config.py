@@ -70,6 +70,34 @@ class ProcessingConfig:
 
 
 @dataclass
+class TransferLearningConfig:
+    """Transfer learning specific configuration parameters"""
+    
+    @dataclass
+    class PatternExtractionConfig:
+        """Pattern extraction configuration"""
+        current_subject_id: str = "subject_001"
+        frequency_bands: Dict[str, list] = field(default_factory=lambda: {
+            'delta': [1, 4],
+            'theta': [4, 8],
+            'alpha': [8, 12],
+            'beta': [12, 30],
+            'gamma': [30, 100]
+        })
+        spatial_filters: int = 10
+        pattern_quality_threshold: float = 0.7
+        extraction_window_size: float = 2.0  # seconds
+        overlap_ratio: float = 0.5
+    
+    pattern_extraction: PatternExtractionConfig = field(
+        default_factory=PatternExtractionConfig
+    )
+    transfer_threshold: float = 0.8
+    adaptation_learning_rate: float = 0.01
+    max_adaptation_iterations: int = 100
+
+
+@dataclass
 class SystemConfig:
     """System-level configuration parameters"""
     # Performance settings
@@ -117,6 +145,7 @@ class Config:
         # Configuration components
         self.hardware = HardwareConfig()
         self.processing = ProcessingConfig()
+        self.transfer_learning = TransferLearningConfig()
         self.system = SystemConfig()
         
         # Configuration file paths
@@ -198,6 +227,9 @@ class Config:
         if 'processing' in config_data:
             self._update_dataclass(self.processing, config_data['processing'])
         
+        if 'transfer_learning' in config_data:
+            self._update_dataclass(self.transfer_learning, config_data['transfer_learning'])
+        
         if 'system' in config_data:
             self._update_dataclass(self.system, config_data['system'])
     
@@ -216,6 +248,9 @@ class Config:
         
         # Processing overrides
         self._apply_env_to_dataclass(self.processing, "PROCESSING_")
+        
+        # Transfer learning overrides
+        self._apply_env_to_dataclass(self.transfer_learning, "TRANSFER_")
         
         # System overrides
         self._apply_env_to_dataclass(self.system, "SYSTEM_")
@@ -272,6 +307,7 @@ class Config:
         config_data = {
             'hardware': self._dataclass_to_dict(self.hardware),
             'processing': self._dataclass_to_dict(self.processing),
+            'transfer_learning': self._dataclass_to_dict(self.transfer_learning),
             'system': self._dataclass_to_dict(self.system)
         }
         
@@ -313,5 +349,6 @@ class Config:
         return (f"Config(\n"
                 f"  hardware={self.hardware}\n"
                 f"  processing={self.processing}\n"
+                f"  transfer_learning={self.transfer_learning}\n"
                 f"  system={self.system}\n"
                 f")")
