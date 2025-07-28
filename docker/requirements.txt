@@ -1,0 +1,67 @@
+# Docker-specific requirements for container build
+# These dependencies are optimized for containerized deployment
+
+# Core scientific computing (pinned for stability)
+numpy==1.24.3
+scipy==1.10.1
+pandas==2.0.3
+scikit-learn==1.3.0
+
+# Neuroimaging libraries
+mne==1.4.2
+nilearn==0.10.1
+dipy==1.7.0
+nibabel==5.1.0
+
+# Neural simulation
+brian2==2.5.1
+nest-simulator==3.4
+
+# Real-time processing
+pylsl==1.16.0
+
+# Deep learning (CPU optimized)
+torch==2.0.1+cpu
+torchvision==0.15.2+cpu
+tensorflow==2.13.0
+
+# Visualization (headless compatible)
+matplotlib==3.7.2
+plotly==5.15.0
+bokeh==3.2.1
+seaborn==0.12.2
+
+# API and web frameworks
+fastapi==0.101.0
+uvicorn[standard]==0.23.2
+websockets==11.0.3
+streamlit==1.25.0
+
+# Data storage and serialization
+h5py==3.9.0
+zarr==2.16.0
+pyarrow==12.0.1
+
+# Async and parallel processing
+asyncio-mqtt==0.13.0
+aiofiles==23.1.0
+aioredis==2.0.1
+
+# Monitoring and logging
+prometheus-client==0.17.1
+structlog==23.1.0
+
+# Configuration and utilities
+pyyaml==6.0.1
+click==8.1.7
+tqdm==4.65.0
+python-dotenv==1.0.0
+
+# Database connectivity
+psycopg2-binary==2.9.7
+sqlalchemy==2.0.19
+alembic==1.11.2
+
+# Container-specific utilities
+gunicorn==21.2.0
+supervisor==4.2.5

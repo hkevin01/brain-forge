@@ -1,0 +1,43 @@
+# GPU Acceleration Dependencies
+# CUDA and GPU-accelerated computing libraries
+
+# GPU-accelerated computing
+cupy-cuda11x>=11.0.0
+numba>=0.56.0
+pycuda>=2022.1
+
+# GPU-accelerated deep learning
+torch>=1.12.0
+torchvision>=0.13.0
+torchaudio>=0.12.0
+
+# TensorFlow with GPU support
+tensorflow>=2.9.0
+
+# GPU-accelerated data processing
+cudf-cu11>=22.08.0
+cuml-cu11>=22.08.0
+cugraph-cu11>=22.08.0
+cuspatial-cu11>=22.08.0
+
+# RAPIDS ecosystem
+rapids-core>=22.08.0
+
+# GPU-accelerated image processing
+opencv-python>=4.6.0
+pillow-simd>=9.0.0
+
+# GPU monitoring
+gpustat>=1.0.0
+nvidia-ml-py>=11.0.0
+
+# GPU-accelerated scientific computing
+jax[cuda11_pip]>=0.3.0
+jaxlib>=0.3.0
+
+# GPU-optimized linear algebra
+mkl>=2022.0.0
+intel-openmp>=2022.0.0
+
+# Memory management for GPU
+pympler>=0.9.0

@@ -1,0 +1,105 @@
+name: Hardware Issue
+description: Report a hardware-related problem
+title: "[HARDWARE] "
+labels: ["hardware", "bug"]
+assignees:
+  - hkevin01
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for hardware-specific issues with Brain-Forge.
+        
+        This includes problems with OMP helmets, Kernel optical devices, accelerometers, or any other hardware components.
+
+  - type: dropdown
+    id: hardware-type
+    attributes:
+      label: Hardware Type
+      description: Which hardware device is having issues?
+      options:
+        - OMP Helmet (Magnetometer)
+        - Kernel Flow (Optical)
+        - Kernel Flux (Optical)
+        - Accelerometer Array
+        - Multiple Devices
+        - Other Hardware
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware-details
+    attributes:
+      label: Hardware Details
+      description: Provide specific details about your hardware
+      placeholder: |
+        - Device Model: 
+        - Serial Number: 
+        - Firmware Version: 
+        - Connection Type: 
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description
+      description: Describe the hardware problem you're experiencing
+      placeholder: What is the hardware doing (or not doing)?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What type of hardware issue is this?
+      options:
+        - Connection/Communication
+        - Data Quality
+        - Calibration
+        - Performance
+        - Physical Damage
+        - Driver/Software
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages
+      description: Any error messages or diagnostic information
+      render: shell
+
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Information
+      description: Information about your system
+      placeholder: |
+        - OS: 
+        - Python Version: 
+        - Brain-Forge Version: 
+        - USB/Serial Drivers: 
+    validations:
+      required: true
+
+  - type: textarea
+    id: troubleshooting
+    attributes:
+      label: Troubleshooting Attempted
+      description: What have you already tried to fix this issue?
+      placeholder: |
+        - [ ] Restarted device
+        - [ ] Reinstalled drivers
+        - [ ] Checked connections
+        - [ ] Updated firmware
+        - [ ] Other: ___
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Any other relevant information, including photos of hardware setup if applicable

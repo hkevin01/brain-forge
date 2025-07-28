@@ -1,0 +1,61 @@
+# Development Dependencies
+# Tools for development, testing, and code quality
+
+# Include base requirements
+-r base.txt
+
+# Testing frameworks
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-asyncio>=0.21.0
+pytest-xdist>=2.5.0
+pytest-benchmark>=4.0.0
+pytest-mock>=3.8.0
+
+# Code quality and formatting
+black>=22.0.0
+flake8>=5.0.0
+mypy>=0.991
+isort>=5.10.0
+bandit>=1.7.0
+safety>=2.0.0
+
+# Pre-commit hooks
+pre-commit>=2.20.0
+
+# Documentation
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.0.0
+myst-parser>=0.18.0
+sphinx-autodoc-typehints>=1.19.0
+pdoc3>=0.10.0
+
+# Development tools
+ipython>=8.0.0
+ipdb>=0.13.0
+memory-profiler>=0.60.0
+line-profiler>=4.0.0
+
+# Jupyter and notebooks
+jupyter>=1.0.0
+jupyterlab>=3.4.0
+notebook>=6.4.0
+jupyter-contrib-nbextensions>=0.5.0
+ipywidgets>=8.0.0
+
+# Performance profiling
+py-spy>=0.3.0
+scalene>=1.5.0
+
+# Database tools
+sqlite-web>=0.4.0
+
+# Additional testing utilities
+factory-boy>=3.2.0
+faker>=15.0.0
+responses>=0.21.0
+vcr-py>=4.2.0
+
+# Development server tools
+watchdog>=2.1.0
+python-multipart>=0.0.5

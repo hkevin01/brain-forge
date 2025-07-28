@@ -1,0 +1,65 @@
+# Hardware Integration Dependencies
+# Libraries for interfacing with brain scanning hardware
+
+# Serial and USB communication
+pyserial>=3.5.0
+pyusb>=1.2.0
+hidapi>=0.12.0
+
+# Bluetooth and wireless communication
+bleak>=0.19.0
+pybluez>=0.23.0
+
+# GPIO and hardware control (Raspberry Pi)
+RPi.GPIO>=0.7.0
+gpiozero>=1.6.0
+adafruit-circuitpython-ads1x15>=2.2.0
+
+# I2C and SPI communication
+smbus2>=0.4.0
+spidev>=3.5.0
+
+# Network communication
+python-osc>=1.8.0
+zmq>=0.0.0
+mqtt-client>=1.6.0
+
+# Hardware-specific drivers
+# Note: These may need to be installed separately or compiled
+# depending on specific hardware manufacturers
+
+# OMP Helmet (Magnetometer) interfaces
+# Custom drivers would be added here based on manufacturer
+
+# Kernel Optical Helmet interfaces
+# Proprietary SDKs may be required
+
+# Accelerometer and IMU libraries
+mpu6050-raspberrypi>=1.0.0
+adafruit-circuitpython-mpu6050>=1.1.0
+
+# Data acquisition hardware
+nidaqmx>=0.6.0  # National Instruments
+comedi>=0.11.0  # Linux real-time DAQ
+
+# Camera and imaging hardware
+opencv-python>=4.6.0
+pypylon>=1.9.0  # Basler cameras
+aravis>=0.8.0   # GenICam cameras
+
+# Audio hardware (for auditory stimuli)
+sounddevice>=0.4.0
+pyaudio>=0.2.0
+soundfile>=0.10.0
+
+# Timing and synchronization
+timeflux>=0.6.0
+psychopy>=2022.2.0
+
+# Low-level hardware access
+mmap>=0.0.0
+ctypes>=0.0.0
+
+# Hardware monitoring
+psutil>=5.9.0
+py-cpuinfo>=8.0.0

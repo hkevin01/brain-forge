@@ -1,0 +1,32 @@
+# Brain-Forge Configuration
+system:
+  name: "brain-forge"
+  version: "0.1.0"
+  debug: false
+
+hardware:
+  omp_helmet:
+    enabled: true
+    channels: 306
+    sampling_rate: 1000
+  
+  kernel_optical:
+    enabled: true
+    channels: 104
+    sampling_rate: 10
+  
+  accelerometer:
+    enabled: true
+    axes: 3
+    sampling_rate: 1000
+
+processing:
+  compression:
+    enabled: true
+    algorithm: "wavelet"
+    ratio: 5
+
+simulation:
+  neurons: 100000
+  timestep: 0.1
+  duration: 1000
