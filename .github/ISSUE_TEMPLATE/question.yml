@@ -1,0 +1,270 @@
+name: Question / Support
+description: Ask questions about Brain-Forge usage, get help, or start discussions
+title: "[QUESTION] "
+labels: ["question", "support", "help wanted"]
+assignees:
+  - hkevin01
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # ❓ Question / Support Request
+        
+        Welcome! We're here to help you succeed with Brain-Forge for your neuroscience research.
+        
+        **This template is for:**
+        - Usage questions and how-to guidance
+        - Best practices and recommendations
+        - Scientific method discussions
+        - Integration and setup help
+        - General Brain-Forge discussions
+        
+        **For other issues, please use:**
+        - 🐛 Bug reports → Use "Bug Report" template
+        - 🚀 Feature requests → Use "Feature Request" template
+        - ⚡ Hardware problems → Use "Hardware Issue" template
+        - 📚 Documentation issues → Use "Documentation Issue" template
+        
+        **Before asking**, please check:
+        - [Brain-Forge Documentation](https://brain-forge.readthedocs.io/)
+        - [FAQ](https://brain-forge.readthedocs.io/en/latest/faq.html)
+        - [Tutorials and Examples](https://brain-forge.readthedocs.io/en/latest/tutorials/)
+        - Existing GitHub issues and discussions
+
+  - type: checkboxes
+    id: pre-submission-checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I have searched existing issues and discussions
+          required: true
+        - label: I have checked the documentation and FAQ
+          required: true
+        - label: This is not a bug report or feature request (I'm using the correct template)
+          required: true
+
+  - type: dropdown
+    id: question-category
+    attributes:
+      label: Question Category
+      description: What type of question or support do you need?
+      options:
+        - Getting Started (installation, first steps, basic setup)
+        - Usage/How-to (specific functionality, workflows)
+        - Best Practices (optimal approaches, recommendations)
+        - Scientific Methods (algorithms, analysis techniques)
+        - Integration (connecting with other tools, systems)
+        - Configuration (settings, parameters, optimization)
+        - Data Handling (formats, processing, storage)
+        - Hardware Setup (device configuration, calibration)
+        - Performance Optimization (speed, efficiency)
+        - Troubleshooting (not a bug, but need help figuring out issue)
+        - Research Design (experimental setup, protocol design)
+        - Educational (learning resources, concepts)
+        - Community/Collaboration (connecting with other users)
+        - Other/General Discussion
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-experience
+    attributes:
+      label: Your Experience Level
+      description: What's your experience level with Brain-Forge and neuroscience computing?
+      options:
+        - New to Brain-Forge and neuroscience computing
+        - New to Brain-Forge, experienced with neuroscience computing
+        - Experienced with Brain-Forge, new to specific feature/area
+        - Experienced Brain-Forge user
+        - Developer/Contributor
+    validations:
+      required: true
+
+  - type: textarea
+    id: question-description
+    attributes:
+      label: Question Description
+      description: What is your question or what help do you need?
+      placeholder: |
+        I'm trying to set up real-time MEG connectivity analysis for a neurofeedback experiment. I have a 306-channel OMP system and need to compute phase-locking value (PLV) in the alpha band (8-12 Hz) with less than 50ms latency. 
+        
+        What's the recommended approach for:
+        1. Setting up the real-time data stream
+        2. Configuring the connectivity analysis parameters
+        3. Handling the results for neurofeedback display
+        
+        I've read the connectivity documentation but I'm unsure about the best practices for low-latency real-time analysis.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: research-context
+    attributes:
+      label: Research Context
+      description: What's the research context for your question?
+      options:
+        - Basic Research (fundamental neuroscience, methods development)
+        - Clinical Research (patient studies, medical applications)
+        - Cognitive Research (behavior, psychology, cognitive neuroscience)
+        - Educational/Teaching (classroom, student projects)
+        - Industry/Commercial (product development, applied research)
+        - Personal/Hobby Project (learning, exploration)
+        - Collaboration (multi-site, shared protocols)
+        - Not research-related (technical interest, development)
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-approach
+    attributes:
+      label: What You've Tried
+      description: What approaches have you already attempted or considered?
+      placeholder: |
+        I've tried:
+        1. Following the basic connectivity tutorial - it works but too slow for real-time
+        2. Looking at the real-time processing examples - but they don't cover connectivity
+        3. Reading about PLV algorithms - understand the theory but not sure about implementation
+        4. Testing with smaller datasets - works fine but need to scale to full 306 channels
+        
+        I haven't yet tried:
+        - GPU acceleration options
+        - Custom connectivity algorithms
+        - Different real-time buffering strategies
+
+  - type: textarea
+    id: technical-context
+    attributes:
+      label: Technical Context
+      description: Relevant technical details about your setup or requirements
+      placeholder: |
+        Setup:
+        - Hardware: OMP Helmet (306 channels), Linux workstation
+        - Brain-Forge version: 0.2.1
+        - Python: 3.11.0
+        - Real-time requirements: <50ms latency
+        - Data: Continuous MEG at 1000Hz sampling rate
+        - Analysis: Alpha band PLV, 2-second sliding windows
+        - Output: WebSocket stream for visualization
+        
+        Requirements:
+        - Must work with live participants (robust, reliable)
+        - Need integration with stimulus presentation software
+        - Should handle artifacts gracefully
+      value: |
+        Setup:
+        - Hardware: 
+        - Brain-Forge version: 
+        - Python: 
+        - Real-time requirements: 
+        - Data: 
+        - Analysis: 
+        - Output: 
+        
+        Requirements:
+        - 
+        - 
+        - 
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Timeline/Urgency
+      description: What's your timeline for resolving this question?
+      options:
+        - Urgent (need help within days for active experiment)
+        - Soon (need help within 1-2 weeks)
+        - Medium-term (need help within a month)
+        - Long-term (planning for future work)
+        - No specific timeline (general interest/learning)
+    validations:
+      required: true
+
+  - type: textarea
+    id: specific-questions
+    attributes:
+      label: Specific Questions
+      description: Break down your question into specific, answerable parts
+      placeholder: |
+        Specific questions:
+        1. What's the recommended real-time connectivity method for <50ms latency?
+        2. How do I configure the real-time buffer size and overlap parameters?
+        3. Are there GPU acceleration options for connectivity analysis?
+        4. What's the best way to handle artifacts in real-time processing?
+        5. How can I validate that my real-time results match offline analysis?
+        6. Are there example configurations for similar neurofeedback setups?
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+        5. 
+        6. 
+
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: Expected Outcome
+      description: What would a helpful answer look like?
+      placeholder: |
+        A helpful answer would include:
+        - Specific configuration examples or code snippets
+        - Recommended parameter values for my use case
+        - Guidance on performance optimization strategies
+        - Pointers to relevant documentation or examples
+        - Best practices from similar research applications
+        - Suggestions for validation and troubleshooting
+
+  - type: checkboxes
+    id: community-help
+    attributes:
+      label: Community Collaboration
+      description: Are you interested in community collaboration?
+      options:
+        - label: I'd be willing to share my solution once I figure it out
+        - label: I'm interested in collaborating with others on similar research
+        - label: I can help test solutions or provide feedback
+        - label: I'd like to contribute documentation based on what I learn
+        - label: I'm open to connecting with other Brain-Forge users in my area
+
+  - type: textarea
+    id: additional-resources
+    attributes:
+      label: Relevant Resources
+      description: Any relevant papers, links, or resources related to your question
+      placeholder: |
+        Relevant resources:
+        - Research papers on real-time connectivity analysis
+        - Similar tools or approaches you've seen
+        - Documentation from other software that does something similar
+        - Conference presentations or talks on related topics
+        - Collaboration opportunities or existing projects
+
+  - type: dropdown
+    id: follow-up-preference
+    attributes:
+      label: Follow-up Preference
+      description: How would you like to receive follow-up help?
+      options:
+        - GitHub issue discussion (public, benefits community)
+        - Email conversation (private, direct communication)
+        - Video call/screen sharing (complex setup, real-time help)
+        - Documentation update (create docs based on resolution)
+        - Community forum post (ongoing discussion)
+        - No specific preference
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information or context
+      placeholder: |
+        - Links to related research or publications
+        - Screenshots or diagrams that might help explain the question
+        - Error messages or logs (if relevant but not a bug)
+        - Collaboration opportunities
+        - Timeline constraints or project deadlines
+        - Institutional requirements or constraints

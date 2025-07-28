@@ -1,0 +1,388 @@
+name: Performance Issue
+description: Report performance problems, bottlenecks, or optimization opportunities
+title: "[PERFORMANCE] "
+labels: ["performance", "optimization", "triage"]
+assignees:
+  - hkevin01
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # ⚡ Performance Issue Report
+        
+        Thank you for reporting a performance issue! Performance is critical for real-time neuroscience applications and large-scale data processing.
+        
+        **Performance Context for Brain-Forge:**
+        - Real-time processing requirements (typically <50ms latency)
+        - Large dataset processing (GB to TB scale MEG/EEG data)
+        - Multi-channel concurrent processing (300+ channels)
+        - Memory-intensive signal processing operations
+        - Hardware acceleration opportunities (GPU, specialized processors)
+        
+        **Before submitting**, please:
+        - Test performance on a clean system if possible
+        - Compare with previous Brain-Forge versions
+        - Check system resources during the performance issue
+        - Consider if this is a configuration/setup issue
+
+  - type: checkboxes
+    id: pre-submission-checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I have tested this on a clean system or environment
+          required: false
+        - label: I have checked system resources (CPU, memory, disk, network) during the issue
+          required: true
+        - label: I have searched for existing performance issues
+          required: true
+
+  - type: dropdown
+    id: performance-category
+    attributes:
+      label: Performance Category
+      description: What type of performance issue are you experiencing?
+      options:
+        - CPU Performance (high CPU usage, slow processing)
+        - Memory Performance (high RAM usage, memory leaks, OOM errors)
+        - Disk I/O Performance (slow file operations, high disk usage)
+        - Network Performance (slow data transfer, high latency)
+        - Real-time Performance (missed deadlines, processing delays)
+        - Startup Performance (slow application/module loading)
+        - Scalability (performance degrades with data size/complexity)
+        - GPU/Hardware Acceleration (underutilized hardware, slow GPU processing)
+        - Algorithm Efficiency (suboptimal algorithms, inefficient implementations)
+        - Memory Leaks/Growth (memory usage increases over time)
+        - Threading/Concurrency (poor parallelization, race conditions)
+        - Database Performance (slow queries, inefficient data access)
+        - Other/Multiple Categories
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-component
+    attributes:
+      label: Affected Component
+      description: Which Brain-Forge component has performance issues?
+      options:
+        - Data Acquisition (OMP, Kernel, real-time streaming)
+        - Signal Processing (filtering, preprocessing, transforms)
+        - Brain Mapping (connectivity analysis, spatial processing)
+        - Neural Simulation (Brian2, NEST integration)
+        - Transfer Learning (pattern extraction, model training)
+        - Visualization (real-time plots, brain viewer, rendering)
+        - API/WebSocket (REST endpoints, real-time communication)
+        - Hardware Interface (drivers, device communication)
+        - Machine Learning (model inference, training loops)
+        - Data Storage/Loading (file I/O, database operations)
+        - Core Infrastructure (configuration, logging, utilities)
+        - Multiple Components
+        - Unknown/Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: performance-description
+    attributes:
+      label: Performance Issue Description
+      description: Detailed description of the performance problem
+      placeholder: |
+        Example: During real-time MEG connectivity analysis with 306 channels, the processing latency increases from 20ms to 200ms after running for approximately 30 minutes. CPU usage remains normal (~60%), but memory usage grows continuously from 2GB to 8GB. This causes missed real-time deadlines and affects experiment timing.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Performance Impact Severity
+      description: How severely does this performance issue affect your work?
+      options:
+        - Critical (Completely prevents real-time operation, system unusable)
+        - High (Major delays, significant impact on research workflow)
+        - Medium (Noticeable slowdown, but work can continue)
+        - Low (Minor performance degradation, minimal impact)
+    validations:
+      required: true
+
+  - type: textarea
+    id: performance-metrics
+    attributes:
+      label: Performance Metrics
+      description: Specific performance measurements and benchmarks
+      placeholder: |
+        Current Performance:
+        - Processing latency: 200ms (target: <50ms)
+        - Memory usage: 8GB and growing (started at 2GB)
+        - CPU usage: 60% average, 85% peak
+        - Disk I/O: 50MB/s reads, 20MB/s writes
+        - Network throughput: 100Mbps (hardware supports 1Gbps)
+        - Frame rate: 15 FPS (target: 30 FPS)
+        - Throughput: 500 samples/second (target: 1000 samples/second)
+        
+        Expected Performance:
+        - Processing latency: <50ms for real-time applications
+        - Memory usage: Stable around 2-3GB
+        - Should utilize available CPU cores efficiently
+      value: |
+        Current Performance:
+        - Processing latency: 
+        - Memory usage: 
+        - CPU usage: 
+        - Disk I/O: 
+        - Network throughput: 
+        - Frame rate: 
+        - Throughput: 
+        
+        Expected Performance:
+        - 
+        - 
+        - 
+    validations:
+      required: true
+
+  - type: textarea
+    id: system-specifications
+    attributes:
+      label: System Specifications
+      description: Detailed hardware and software specifications
+      placeholder: |
+        Hardware:
+        - CPU: Intel i7-12700K, 12 cores, 20 threads, 3.6-5.0 GHz
+        - Memory: 64GB DDR4-3200
+        - Storage: 2TB NVMe SSD (Samsung 980 Pro)
+        - GPU: NVIDIA RTX 4080, 16GB VRAM
+        - Network: Gigabit Ethernet
+        - Specialized Hardware: OMP Helmet (306 channels), Kernel Flow
+        
+        Software:
+        - OS: Ubuntu 22.04 LTS (Linux 5.15.0)
+        - Python: 3.11.0
+        - Brain-Forge: v0.2.1
+        - NumPy: 1.24.0
+        - SciPy: 1.10.0
+        - PyTorch: 2.0.0 (if using GPU acceleration)
+        - MNE-Python: 1.3.0
+        - Available RAM: 58GB free
+        - Available Disk: 1.2TB free
+      value: |
+        Hardware:
+        - CPU: 
+        - Memory: 
+        - Storage: 
+        - GPU: 
+        - Network: 
+        - Specialized Hardware: 
+        
+        Software:
+        - OS: 
+        - Python: 
+        - Brain-Forge: 
+        - NumPy: 
+        - SciPy: 
+        - PyTorch: 
+        - MNE-Python: 
+        - Available RAM: 
+        - Available Disk: 
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce Performance Issue
+      description: Detailed steps to reproduce the performance problem
+      placeholder: |
+        1. Load large MEG dataset (brain_forge.load_data('large_meg_data.fif'))
+        2. Initialize real-time connectivity analyzer with 306 channels
+        3. Start real-time processing at 1000Hz sampling rate
+        4. Monitor performance for 30+ minutes
+        5. Observe gradual latency increase and memory growth
+        6. Performance becomes unacceptable after ~30 minutes
+      value: |
+        1. 
+        2. 
+        3. 
+        4. 
+        5. 
+        6. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: data-characteristics
+    attributes:
+      label: Data Characteristics
+      description: Characteristics of the data being processed when performance issues occur
+      placeholder: |
+        Data Properties:
+        - Data type: MEG (306 channels)
+        - Sampling rate: 1000 Hz
+        - Duration: Continuous (real-time streaming)
+        - File size: ~500MB per 10-minute segment
+        - Data format: .fif files
+        - Channels: 204 gradiometers, 102 magnetometers
+        - Preprocessing: High-pass 1Hz, low-pass 40Hz, notch 60Hz
+        - Analysis window: 2-second sliding windows with 1-second overlap
+        - Frequency bands: Delta, theta, alpha, beta, gamma
+
+  - type: dropdown
+    id: performance-trend
+    attributes:
+      label: Performance Trend
+      description: How does the performance issue change over time?
+      options:
+        - Constant (performance is always poor from the start)
+        - Gradual Degradation (slowly gets worse over time)
+        - Sudden Degradation (performance drops suddenly at specific point)
+        - Periodic (performance varies cyclically)
+        - Data-dependent (varies with input data characteristics)
+        - Load-dependent (varies with system or user load)
+        - Random/Intermittent (unpredictable performance variations)
+    validations:
+      required: true
+
+  - type: textarea
+    id: profiling-data
+    attributes:
+      label: Profiling and Diagnostic Data
+      description: Any profiling data, benchmarks, or diagnostic output
+      placeholder: |
+        Profiling Results (using cProfile or similar):
+        - Top CPU-consuming functions:
+          * connectivity_analysis(): 45% of CPU time
+          * fft_computation(): 25% of CPU time
+          * data_preprocessing(): 15% of CPU time
+          
+        Memory Profile:
+        - Large memory allocations in connectivity_matrix_computation()
+        - Memory not being freed after analysis windows
+        - Potential memory leak in real-time buffer management
+        
+        System Monitoring:
+        - htop/top output showing resource usage
+        - iostat showing disk I/O patterns
+        - nvidia-smi for GPU utilization (if applicable)
+      render: shell
+
+  - type: checkboxes
+    id: optimization-attempts
+    attributes:
+      label: Optimization Attempts
+      description: What optimization strategies have you already tried?
+      options:
+        - label: Reduced data size or complexity
+        - label: Adjusted processing parameters (window size, overlap, etc.)
+        - label: Enabled hardware acceleration (GPU, multi-threading)
+        - label: Modified memory allocation strategies
+        - label: Tried different algorithms or methods
+        - label: Optimized system configuration (OS, drivers)
+        - label: Used different data formats or storage methods
+        - label: Profiled code to identify bottlenecks
+        - label: Tested on different hardware configurations
+        - label: Tried previous Brain-Forge versions
+        - label: Adjusted Python/NumPy/SciPy configurations
+
+  - type: textarea
+    id: comparison-data
+    attributes:
+      label: Performance Comparisons
+      description: Comparisons with other versions, tools, or configurations
+      placeholder: |
+        Version Comparisons:
+        - Brain-Forge v0.1.9: Processing latency was stable at 30ms
+        - Brain-Forge v0.2.0: First noticed gradual degradation
+        - Brain-Forge v0.2.1: Issue persists and may be worse
+        
+        Tool Comparisons:
+        - MNE-Python direct: 25ms latency for similar analysis
+        - Custom NumPy implementation: 40ms latency
+        - MATLAB equivalent: 35ms latency
+        
+        Configuration Comparisons:
+        - Single-threaded: 200ms latency
+        - Multi-threaded (8 cores): 150ms latency
+        - GPU acceleration: 80ms latency (but still growing over time)
+
+  - type: dropdown
+    id: real-time-requirements
+    attributes:
+      label: Real-time Requirements
+      description: Are there specific real-time performance requirements?
+      options:
+        - Strict Real-time (hard deadlines, <10ms latency)
+        - Soft Real-time (preferred deadlines, <50ms latency)
+        - Near Real-time (interactive use, <200ms latency)
+        - Batch Processing (no strict timing, optimized for throughput)
+        - Not Real-time Critical (acceptable delays for better accuracy)
+    validations:
+      required: true
+
+  - type: textarea
+    id: scalability-concerns
+    attributes:
+      label: Scalability Information
+      description: How does performance scale with different data sizes or configurations?
+      placeholder: |
+        Scaling Observations:
+        - 64 channels: 15ms latency (acceptable)
+        - 128 channels: 30ms latency (borderline)
+        - 306 channels: 200ms latency (unacceptable)
+        - Performance scales roughly as O(n²) with channel count
+        - Memory usage scales linearly with data duration
+        - Processing time increases exponentially with frequency resolution
+
+  - type: checkboxes
+    id: hardware-utilization
+    attributes:
+      label: Hardware Utilization
+      description: How well is the available hardware being utilized?
+      options:
+        - label: CPU cores are underutilized (low multi-threading efficiency)
+        - label: Memory bandwidth appears to be a bottleneck
+        - label: GPU is underutilized (could benefit from more GPU acceleration)
+        - label: Storage I/O is a bottleneck (slow disk operations)
+        - label: Network bandwidth is limiting performance
+        - label: Hardware seems well-utilized but still too slow
+        - label: Unsure about hardware utilization efficiency
+
+  - type: textarea
+    id: suggested-optimizations
+    attributes:
+      label: Suggested Optimizations
+      description: Any ideas for performance improvements
+      placeholder: |
+        Potential Optimizations:
+        - Implement more efficient connectivity algorithms (e.g., fast PLV computation)
+        - Add memory pooling to reduce allocation/deallocation overhead
+        - Optimize data structures for better cache locality
+        - Implement streaming algorithms to reduce memory footprint
+        - Add GPU acceleration for matrix operations
+        - Use more efficient data formats (HDF5 with compression)
+        - Implement parallel processing for independent channels
+
+  - type: dropdown
+    id: research-impact
+    attributes:
+      label: Research Impact
+      description: How does this performance issue affect your research?
+      options:
+        - Blocking (Cannot proceed with experiments)
+        - Severe (Major limitations on experimental design)
+        - Moderate (Can work around but with significant constraints)
+        - Minor (Slight inconvenience but research continues)
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant performance information
+      placeholder: |
+        - Performance requirements for specific research protocols
+        - Comparison with other neuroscience software tools
+        - Budget or timeline constraints for performance improvements
+        - Collaboration needs (multi-site performance requirements)
+        - Publication deadlines affected by performance issues
