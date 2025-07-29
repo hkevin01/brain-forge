@@ -7,9 +7,9 @@ name = "brain-forge"
 version = "0.1.0-dev"
 description = "Advanced Multi-Modal Brain-Computer Interface System"
 readme = "README.md"
-license = {text = "TBD"}
+license = { text = "TBD" }
 authors = [
-    {name = "Brain-Forge Development Team", email = "dev@brain-forge.org"}
+    { name = "Brain-Forge Development Team", email = "dev@brain-forge.org" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -18,39 +18,39 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Human Machine Interfaces",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Operating System :: OS Independent"
+    "Operating System :: OS Independent",
 ]
 requires-python = ">=3.8"
 dependencies = [
     # Core scientific computing
     "numpy>=1.21.0",
-    "scipy>=1.7.0", 
+    "scipy>=1.7.0",
     "scikit-learn>=1.0.0",
     "pandas>=1.3.0",
-    
+
     # Signal processing
     "PyWavelets>=1.3.0",
     "mne>=1.0.0",
     "nilearn>=0.9.0",
-    
+
     # Real-time streaming
     "pylsl>=1.16.0",
-    
+
     # Neural simulation
     "brian2>=2.5.0",
     "nest-simulator>=3.0",
-    
+
     # Configuration and logging
     "pyyaml>=6.0",
     "pydantic>=1.9.0",
-    
+
     # Utilities
     "tqdm>=4.64.0",
     "click>=8.0.0",
-    "rich>=12.0.0"
+    "rich>=12.0.0",
 ]
 
 [project.optional-dependencies]
@@ -60,18 +60,14 @@ dev = [
     "pytest-cov>=3.0.0",
     "pytest-asyncio>=0.20.0",
     "black>=22.0.0",
-    "isort>=5.10.0", 
+    "isort>=5.10.0",
     "flake8>=4.0.0",
     "mypy>=0.950",
-    "pre-commit>=2.17.0"
+    "pre-commit>=2.17.0",
 ]
 
 # GPU acceleration
-gpu = [
-    "cupy-cuda11x>=10.0.0",
-    "torch>=1.11.0",
-    "tensorflow>=2.8.0"
-]
+gpu = ["cupy-cuda11x>=10.0.0", "torch>=1.11.0", "tensorflow>=2.8.0"]
 
 # Visualization
 viz = [
@@ -79,14 +75,14 @@ viz = [
     "seaborn>=0.11.0",
     "plotly>=5.6.0",
     "pyvista>=0.34.0",
-    "bokeh>=2.4.0"
+    "bokeh>=2.4.0",
 ]
 
 # Hardware interfaces
 hardware = [
     "pyserial>=3.5",
-    "bleak>=0.14.0",  # Bluetooth LE
-    "keyboard>=0.13.0"
+    "bleak>=0.14.0",    # Bluetooth LE
+    "keyboard>=0.13.0",
 ]
 
 # Web interface
@@ -94,20 +90,14 @@ web = [
     "fastapi>=0.75.0",
     "uvicorn>=0.17.0",
     "websockets>=10.2",
-    "jinja2>=3.0.0"
+    "jinja2>=3.0.0",
 ]
 
 # Documentation
-docs = [
-    "sphinx>=4.4.0",
-    "sphinx-rtd-theme>=1.0.0",
-    "myst-parser>=0.17.0"
-]
+docs = ["sphinx>=4.4.0", "sphinx-rtd-theme>=1.0.0", "myst-parser>=0.17.0"]
 
 # Complete installation
-all = [
-    "brain-forge[dev,gpu,viz,hardware,web,docs]"
-]
+all = ["brain-forge[dev,gpu,viz,hardware,web,docs]"]
 
 [project.urls]
 Homepage = "https://github.com/brain-forge/brain-forge"
@@ -134,16 +124,166 @@ multi_line_output = 3
 include_trailing_comma = true
 line_length = 88
 
+# Flake8 configuration for ignoring common false positives
+[tool.flake8]
+max-line-length = 88
+extend-ignore = [
+    # Common false positives to ignore
+    "E203", # whitespace before ':' (conflicts with black)
+    "E501", # line too long (handled by black)
+    "W503", # line break before binary operator (outdated)
+    "W504", # line break after binary operator (conflicts with W503)
+    "E226", # missing whitespace around arithmetic operator
+    "E402", # module level import not at top of file (sometimes needed)
+    "F401", # imported but unused (sometimes needed for __init__.py)
+    "F403", # 'from module import *' used (sometimes needed)
+    "F405", # name may be undefined from star imports
+    "B902", # Invalid first argument used for method
+    "B006", # Do not use mutable data structures for argument defaults
+    "C901", # too complex (sometimes necessary for specialized algorithms)
+    "E722", # do not use bare except (sometimes needed for broad error handling)
+    "W601", # .has_key() is deprecated (python 2 only)
+    "W602", # deprecated form of raising exception (python 2 only)
+    "E741", # ambiguous variable name (l, O, I - sometimes needed in math contexts)
+]
+per-file-ignores = [
+    # Additional ignores for specific file patterns
+    "__init__.py:F401,F403,F405",         # Allow unused imports in __init__ files
+    "test_*.py:F401,F403,F405,E501",      # More lenient for test files
+    "tests/*.py:F401,F403,F405,E501",     # More lenient for test files
+    "scripts/*.py:E402,F401,E501",        # More lenient for scripts
+    "docs/*.py:E402,F401,E501",           # More lenient for documentation
+    "examples/*.py:E402,F401,E501",       # More lenient for examples
+    "src/specialized_tools.py:E501,C901", # Scientific computing often needs longer lines
+    "src/*/models.py:E501",               # Model definitions can have long lines
+    "src/*/config.py:E501",               # Configuration files can have long lines
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".tox",
+    ".eggs",
+    "venv",
+    ".venv",
+    "env",
+    ".env",
+]
+
+# MyPy configuration for type checking with common issue suppression
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false       # Too strict for scientific computing
+disallow_incomplete_defs = false    # Too strict for scientific computing
+check_untyped_defs = true
+disallow_untyped_decorators = false # Many scientific libraries lack types
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false         # Can be noisy
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+ignore_missing_imports = true       # Many scientific packages lack type stubs
+
+# Per-module mypy configuration
+[[tool.mypy.overrides]]
+module = [
+    "numpy.*",
+    "scipy.*",
+    "sklearn.*",
+    "pandas.*",
+    "matplotlib.*",
+    "seaborn.*",
+    "plotly.*",
+    "brian2.*",
+    "nest.*",
+    "mne.*",
+    "nilearn.*",
+    "pylsl.*",
+    "pyvista.*",
+    "mayavi.*",
+    "cupy.*",
+    "braindecode.*",
+    "neurokit2.*",
+    "moabb.*",
+    "PyWavelets.*",
+]
+ignore_missing_imports = true
+ignore_errors = true
+
+# Pylint configuration for comprehensive but practical checking
+[tool.pylint.main]
+extension-pkg-allow-list = ["numpy", "scipy", "sklearn", "pandas", "cv2"]
+jobs = 0                                                                  # Use all available processors
+
+[tool.pylint."messages control"]
+disable = [
+    # Disable overly strict or noisy checks
+    "line-too-long",                 # Handled by black/flake8
+    "too-many-arguments",            # Scientific functions often need many parameters
+    "too-many-locals",               # Complex algorithms need many variables
+    "too-many-branches",             # Scientific code can be complex
+    "too-many-statements",           # Scientific code can be complex
+    "too-few-public-methods",        # Data classes and utilities are fine
+    "missing-docstring",             # Too noisy for development
+    "invalid-name",                  # Scientific variables often use math notation
+    "unused-argument",               # Common in callback functions
+    "broad-except",                  # Sometimes needed for robust error handling
+    "import-outside-toplevel",       # Sometimes needed for optional dependencies
+    "duplicate-code",                # Common in similar scientific functions
+    "fixme",                         # TODO/FIXME comments are acceptable
+    "global-statement",              # Sometimes needed for global state
+    "consider-using-f-string",       # Not always preferred
+    "unnecessary-pass",              # Sometimes needed for clarity
+    "unused-import",                 # Handled by flake8
+    "wrong-import-position",         # Sometimes needed for compatibility
+    "consider-using-with",           # Not always applicable
+    "no-member",                     # Often false positive with dynamic libraries
+    "unspecified-encoding",          # Often not needed for simple file operations
+    "consider-using-enumerate",      # Not always clearer
+    "consider-using-dict-items",     # Not always preferred
+    "logging-fstring-interpolation", # F-strings in logging are often fine
+    "import-error",                  # Handled by other tools
+]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint.design]
+max-args = 10       # Allow more arguments for scientific functions
+max-locals = 20     # Allow more locals for complex algorithms
+max-branches = 15   # Allow more complexity for scientific code
+max-statements = 60 # Allow longer functions for scientific code
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/tests/*", "*/test_*", "setup.py", "venv/*", ".venv/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = [
-    "--cov=src",
-    "--cov-report=html",
-    "--cov-report=term-missing"
-]
+addopts = ["--cov=src", "--cov-report=html", "--cov-report=term-missing"]
 markers = [
     "slow: marks tests as slow",
     "hardware: marks tests requiring hardware",
     "integration: marks tests as integration tests",
-    "gpu: marks tests requiring GPU support"
+    "gpu: marks tests requiring GPU support",
 ]

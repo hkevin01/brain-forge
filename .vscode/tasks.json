@@ -13,6 +13,17 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "Run Comprehensive Tests",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"-m", "pytest", "tests/", "-v", "--tb=short"
+			],
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": ["$python"]
+		},
+		{
 			"label": "Basic Functionality Test",
 			"type": "shell", 
 			"command": "python3",
@@ -31,6 +42,17 @@
 				"brain_forge_complete.py"
 			],
 			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Validate Project Completion",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"scripts/quick_validate.py"
+			],
+			"group": "test",
 			"isBackground": false,
 			"problemMatcher": []
 		}

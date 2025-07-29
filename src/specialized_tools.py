@@ -79,44 +79,104 @@ class BraindecodeIntegration:
         self.models = {}
         
     def create_eegnet_classifier(self, n_channels: int = 64, n_classes: int = 2):
-        """Create EEGNet classifier for EEG classification"""
+        """Create EEGNet classifier for EEG classification using Braindecode"""
         try:
-            # EEGNet architecture for EEG classification
-            model_config = {
-                'name': 'EEGNet',
-                'n_channels': n_channels,
-                'n_classes': n_classes,
-                'input_window_samples': 1000,  # 1 second at 1000 Hz
-                'final_conv_length': 'auto'
-            }
-            
-            # Note: Actual Braindecode implementation would be:
-            # from braindecode.models import EEGNetv4
-            # model = EEGNetv4(n_chans=n_channels, n_outputs=n_classes)
-            
-            self.models['eegnet'] = model_config
-            self.logger.info(f"EEGNet classifier configured: {n_channels} channels, {n_classes} classes")
-            return model_config
+            # Try to use real Braindecode implementation
+            try:
+                from braindecode.models import EEGNetv4
+                import torch
+                
+                # Create actual EEGNet model
+                model = EEGNetv4(
+                    n_chans=n_channels,
+                    n_outputs=n_classes,
+                    input_window_samples=1000,  # 1 second at 1000 Hz 
+                    final_conv_length='auto'
+                )
+                
+                self.models['eegnet'] = {
+                    'model': model,
+                    'name': 'EEGNet',
+                    'n_channels': n_channels,
+                    'n_classes': n_classes,
+                    'input_window_samples': 1000,
+                    'framework': 'braindecode',
+                    'ready_for_training': True
+                }
+                
+                self.logger.info(f"✅ Real EEGNet model created with Braindecode: {n_channels} channels, {n_classes} classes")
+                return self.models['eegnet']
+                
+            except ImportError:
+                # Fallback to simulation if Braindecode not available
+                self.logger.warning("Braindecode not available, using simulation")
+                model_config = {
+                    'name': 'EEGNet',
+                    'n_channels': n_channels,
+                    'n_classes': n_classes,
+                    'input_window_samples': 1000,
+                    'final_conv_length': 'auto',
+                    'framework': 'simulation',
+                    'ready_for_training': False
+                }
+                
+                self.models['eegnet'] = model_config
+                self.logger.info(f"EEGNet classifier configured (simulation): {n_channels} channels, {n_classes} classes")
+                return model_config
             
         except Exception as e:
             self.logger.error(f"EEGNet creation failed: {e}")
             raise BrainForgeError(f"Failed to create EEGNet classifier: {e}")
     
     def create_shallow_fbcsp_net(self, n_channels: int = 64):
-        """Create Shallow FBCSP Network for motor imagery classification"""
+        """Create Shallow FBCSP Network for motor imagery classification using Braindecode"""
         try:
-            model_config = {
-                'name': 'ShallowFBCSPNet',
-                'n_channels': n_channels,
-                'n_classes': 4,  # Typical for motor imagery
-                'input_window_samples': 1000,
-                'n_filters_time': 40,
-                'n_filters_spat': 40
-            }
-            
-            self.models['shallow_fbcsp'] = model_config
-            self.logger.info(f"Shallow FBCSP Network configured: {n_channels} channels")
-            return model_config
+            # Try to use real Braindecode implementation
+            try:
+                from braindecode.models import ShallowFBCSPNet
+                import torch
+                
+                # Create actual Shallow FBCSP model
+                model = ShallowFBCSPNet(
+                    n_chans=n_channels,
+                    n_outputs=4,  # Typical for motor imagery (left hand, right hand, feet, tongue)
+                    input_window_samples=1000,
+                    n_filters_time=40,
+                    n_filters_spat=40
+                )
+                
+                self.models['shallow_fbcsp'] = {
+                    'model': model,
+                    'name': 'ShallowFBCSPNet',
+                    'n_channels': n_channels,
+                    'n_classes': 4,
+                    'input_window_samples': 1000,
+                    'n_filters_time': 40,
+                    'n_filters_spat': 40,
+                    'framework': 'braindecode',
+                    'ready_for_training': True
+                }
+                
+                self.logger.info(f"✅ Real Shallow FBCSP Network created with Braindecode: {n_channels} channels")
+                return self.models['shallow_fbcsp']
+                
+            except ImportError:
+                # Fallback to simulation if Braindecode not available
+                self.logger.warning("Braindecode not available, using simulation")
+                model_config = {
+                    'name': 'ShallowFBCSPNet',
+                    'n_channels': n_channels,
+                    'n_classes': 4,
+                    'input_window_samples': 1000,
+                    'n_filters_time': 40,
+                    'n_filters_spat': 40,
+                    'framework': 'simulation',
+                    'ready_for_training': False
+                }
+                
+                self.models['shallow_fbcsp'] = model_config
+                self.logger.info(f"Shallow FBCSP Network configured (simulation): {n_channels} channels")
+                return model_config
             
         except Exception as e:
             self.logger.error(f"Shallow FBCSP creation failed: {e}")
@@ -132,32 +192,119 @@ class NeuroKit2Integration:
     def process_eeg_signals(self, eeg_data: np.ndarray, sampling_rate: float = 1000.0):
         """Process EEG signals using NeuroKit2"""
         try:
-            # NeuroKit2 EEG processing pipeline
-            processed_results = {
-                'cleaned_eeg': None,
-                'power_bands': {},
-                'artifacts_removed': 0,
-                'quality_score': 0.0
-            }
-            
-            # Note: Actual NeuroKit2 implementation would be:
-            # import neurokit2 as nk
-            # cleaned = nk.eeg_clean(eeg_data, sampling_rate=sampling_rate)
-            # bands = nk.eeg_power(cleaned, sampling_rate=sampling_rate)
-            
-            # Simulate processing
-            processed_results['cleaned_eeg'] = eeg_data  # Placeholder
-            processed_results['power_bands'] = {
-                'delta': np.mean(eeg_data ** 2),
-                'theta': np.mean(eeg_data ** 2) * 0.8,
-                'alpha': np.mean(eeg_data ** 2) * 0.6,
-                'beta': np.mean(eeg_data ** 2) * 0.4,
-                'gamma': np.mean(eeg_data ** 2) * 0.2
-            }
-            processed_results['quality_score'] = 0.85  # Simulated quality
-            
-            self.logger.info("EEG signals processed with NeuroKit2")
-            return processed_results
+            # Try to use real NeuroKit2 implementation
+            try:
+                import neurokit2 as nk
+                
+                # Real NeuroKit2 EEG processing pipeline
+                processed_results = {
+                    'cleaned_eeg': None,
+                    'power_bands': {},
+                    'artifacts_removed': 0,
+                    'quality_score': 0.0,
+                    'framework': 'neurokit2'
+                }
+                
+                # Process each channel if multi-channel data
+                if eeg_data.ndim == 2:
+                    # Multi-channel EEG data (channels x samples)
+                    cleaned_channels = []
+                    all_power_bands = []
+                    
+                    for channel_idx in range(eeg_data.shape[0]):
+                        channel_data = eeg_data[channel_idx, :]
+                        
+                        # Clean EEG data using NeuroKit2
+                        # Note: NeuroKit2 doesn't have eeg_clean function, using signal_filter
+                        cleaned_channel = nk.signal_filter(
+                            channel_data, 
+                            sampling_rate=sampling_rate,
+                            lowcut=1.0,  # High-pass filter at 1 Hz
+                            highcut=40.0,  # Low-pass filter at 40 Hz
+                            method='butterworth'
+                        )
+                        cleaned_channels.append(cleaned_channel)
+                        
+                        # Calculate power in frequency bands using signal_power
+                        power_bands = nk.signal_power(
+                            cleaned_channel, 
+                            sampling_rate=sampling_rate,
+                            frequency_bands={
+                                'delta': [1, 4],
+                                'theta': [4, 8], 
+                                'alpha': [8, 13],
+                                'beta': [13, 30],
+                                'gamma': [30, 40]
+                            }
+                        )
+                        all_power_bands.append(power_bands)
+                    
+                    processed_results['cleaned_eeg'] = np.array(cleaned_channels)
+                    # Average power bands across channels
+                    processed_results['power_bands'] = {
+                        'delta': np.mean([pb['delta'] for pb in all_power_bands]),
+                        'theta': np.mean([pb['theta'] for pb in all_power_bands]),
+                        'alpha': np.mean([pb['alpha'] for pb in all_power_bands]),
+                        'beta': np.mean([pb['beta'] for pb in all_power_bands]),
+                        'gamma': np.mean([pb['gamma'] for pb in all_power_bands])
+                    }
+                    
+                else:
+                    # Single channel EEG data
+                    cleaned_eeg = nk.signal_filter(
+                        eeg_data, 
+                        sampling_rate=sampling_rate,
+                        lowcut=1.0,
+                        highcut=40.0,
+                        method='butterworth'
+                    )
+                    
+                    power_bands = nk.signal_power(
+                        cleaned_eeg, 
+                        sampling_rate=sampling_rate,
+                        frequency_bands={
+                            'delta': [1, 4],
+                            'theta': [4, 8],
+                            'alpha': [8, 13], 
+                            'beta': [13, 30],
+                            'gamma': [30, 40]
+                        }
+                    )
+                    
+                    processed_results['cleaned_eeg'] = cleaned_eeg
+                    processed_results['power_bands'] = power_bands
+                
+                # Calculate quality score based on signal-to-noise ratio
+                if processed_results['cleaned_eeg'] is not None:
+                    signal_power = np.var(processed_results['cleaned_eeg'])
+                    noise_estimate = np.var(eeg_data - processed_results['cleaned_eeg'] if eeg_data.shape == processed_results['cleaned_eeg'].shape else eeg_data)
+                    snr = signal_power / (noise_estimate + 1e-10)
+                    processed_results['quality_score'] = min(1.0, snr / 10.0)  # Normalize to 0-1
+                else:
+                    processed_results['quality_score'] = 0.5
+                
+                self.logger.info("✅ EEG signals processed with real NeuroKit2")
+                return processed_results
+                
+            except ImportError:
+                # Fallback to simulation if NeuroKit2 not available
+                self.logger.warning("NeuroKit2 not available, using simulation")
+                processed_results = {
+                    'cleaned_eeg': eeg_data,  # Placeholder
+                    'power_bands': {
+                        'delta': np.mean(eeg_data ** 2),
+                        'theta': np.mean(eeg_data ** 2) * 0.8,
+                        'alpha': np.mean(eeg_data ** 2) * 0.6,
+                        'beta': np.mean(eeg_data ** 2) * 0.4,
+                        'gamma': np.mean(eeg_data ** 2) * 0.2
+                    },
+                    'artifacts_removed': 0,
+                    'quality_score': 0.85,  # Simulated quality
+                    'framework': 'simulation'
+                }
+                
+                self.logger.info("EEG signals processed with simulation")
+                return processed_results
             
         except Exception as e:
             self.logger.error(f"NeuroKit2 EEG processing failed: {e}")

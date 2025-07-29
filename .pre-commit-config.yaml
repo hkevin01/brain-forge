@@ -1,0 +1,95 @@
+# Pre-commit hooks configuration for Brain-Forge
+# Install with: pre-commit install
+# Run manually with: pre-commit run --all-files
+
+repos:
+  # Black code formatting
+  - repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+      - id: black
+        language_version: python3
+        args: [--line-length=88]
+  
+  # isort import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: [--profile=black, --line-length=88]
+  
+  # Basic pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(.*\.md|.*\.rst)$  # Allow trailing spaces in markdown
+      - id: end-of-file-fixer
+        exclude: ^(.*\.json)$  # Some JSON files shouldn't end with newline
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-toml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=1024]  # Limit files to 1MB
+      - id: debug-statements
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+  
+  # Flake8 linting (will use .flake8 config)
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [
+          flake8-docstrings,
+          flake8-bugbear,
+          flake8-comprehensions,
+          flake8-simplify,
+        ]
+        # Exclude files that are known to have issues
+        exclude: |
+          (?x)(
+            ^scripts/demo_third_party_integration\.py$|
+            ^scripts/test_integration\.py$
+          )
+  
+  # MyPy type checking (optional, can be slow)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.0.1
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-PyYAML, types-requests]
+        # Only run on core source files to avoid noise
+        files: ^src/(core|api|config)/.*\.py$
+  
+  # Pylint (optional, very comprehensive but can be slow)
+  # Uncomment to enable full pylint checking
+  # - repo: local
+  #   hooks:
+  #     - id: pylint
+  #       name: pylint
+  #       entry: pylint
+  #       language: system
+  #       types: [python]
+  #       files: ^src/.*\.py$
+  #       exclude: ^(tests|scripts|examples)/.*\.py$
+
+# Global settings
+default_stages: [commit]
+fail_fast: false  # Continue running hooks even if one fails
+
+# CI-specific settings (can be overridden in CI)
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

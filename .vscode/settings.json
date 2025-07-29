@@ -8,5 +8,116 @@
     "scminput": false
   },
   "chat.tools.autoApprove": true,
-  "chat.agent.maxRequests": 100
+  "chat.agent.maxRequests": 100,
+  
+  // Python interpreter and environment
+  "python.defaultInterpreterPath": "./venv/bin/python",
+  "python.terminal.activateEnvironment": true,
+  
+  // Linting configuration
+  "python.linting.enabled": true,
+  "python.linting.lintOnSave": true,
+  
+  // Flake8 configuration
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Path": "flake8",
+  "python.linting.flake8Args": [
+      "--config=.flake8"
+  ],
+  
+  // Pylint configuration (optional, can be disabled if too slow)
+  "python.linting.pylintEnabled": false,
+  "python.linting.pylintPath": "pylint",
+  "python.linting.pylintArgs": [
+      "--rcfile=.pylintrc"
+  ],
+  
+  // MyPy configuration
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyPath": "mypy",
+  "python.linting.mypyArgs": [
+      "--config-file=.mypy.ini"
+  ],
+  
+  // Black formatting
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "black",
+  "python.formatting.blackArgs": [
+      "--line-length=88"
+  ],
+  
+  // isort import organization
+  "python.sortImports.path": "isort",
+  "python.sortImports.args": [
+      "--profile=black",
+      "--line-length=88"
+  ],
+  
+  // Editor settings for Python
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+  },
+  
+  // Ruler at line length limit
+  "editor.rulers": [88],
+  
+  // Tab and indentation settings
+  "[python]": {
+      "editor.tabSize": 4,
+      "editor.insertSpaces": true,
+      "editor.detectIndentation": false,
+      "editor.trimAutoWhitespace": true
+  },
+  
+  // File associations and patterns
+  "files.associations": {
+      "*.toml": "toml",
+      ".flake8": "ini",
+      ".pylintrc": "ini",
+      ".mypy.ini": "ini"
+  },
+  
+  // Exclude patterns for file explorer
+  "files.exclude": {
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/.mypy_cache": true,
+      "**/.pytest_cache": true,
+      "**/htmlcov": true,
+      "**/.coverage": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/*.egg-info": true
+  },
+  
+  // Test discovery and configuration
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": [
+      "tests",
+      "--cov=src",
+      "--cov-report=html",
+      "--cov-report=term-missing"
+  ],
+  
+  // Language server settings
+  "python.languageServer": "Pylance",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.extraPaths": [
+      "./src"
+  ],
+  
+  // Disable certain warnings that are handled by our linting setup
+  "python.analysis.diagnosticSeverityOverrides": {
+      "reportMissingImports": "none",
+      "reportMissingTypeStubs": "none",
+      "reportUnknownMemberType": "none",
+      "reportUnknownVariableType": "none",
+      "reportUnknownArgumentType": "none"
+  }
 }
