@@ -55,6 +55,17 @@
 			"group": "test",
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "Single Modality BCI Demo",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"examples/single_modality_bci_demo.py"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }
