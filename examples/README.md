@@ -52,8 +52,8 @@ Each demo has detailed documentation with testing instructions, expected outputs
 - **[`api_integration_demo.py`](./docs/api_integration_demo_README.md)** - REST API, WebSocket streaming, and SDK generation
 
 ### 📚 Interactive Tutorials
-- **[`01_Interactive_Data_Acquisition.ipynb`](./docs/interactive_data_acquisition_README.md)** - Interactive data acquisition tutorial
-- **[`02_Incremental_Development_Strategy.ipynb`](./docs/incremental_development_strategy_README.md)** - Strategic development approach with interactive analysis
+- **[`01_Interactive_Data_Acquisition.ipynb`](./docs/interactive_data_acquisition_README.md)** - Hands-on Brain-Forge data acquisition with interactive widgets
+- **[`02_Incremental_Development_Strategy.ipynb`](./docs/incremental_development_strategy_README.md)** - Strategic 3-phase development methodology with planning tools
 
 ## 🎯 Strategic Development Approach
 
