@@ -6,18 +6,54 @@ This directory contains comprehensive examples and demonstrations of the Brain-F
 
 ```
 examples/
-├── jupyter_notebooks/           # Interactive tutorials and analysis
+├── docs/                               # Individual demo documentation
+├── jupyter_notebooks/                 # Interactive tutorials and analysis
 │   ├── 01_Interactive_Data_Acquisition.ipynb
 │   └── 02_Incremental_Development_Strategy.ipynb
-├── real_time_acquisition_demo.py      # Multi-modal data acquisition
-├── neural_processing_demo.py           # Signal processing pipeline
-├── brain_simulation_demo.py            # Digital brain twin creation
+├── quick_start.py                      # Minimal Brain-Forge introduction
+├── brain_forge_complete.py            # Complete system demonstration
 ├── single_modality_demo.py            # Focused single-modality approach
-├── mock_hardware_framework.py         # Development without hardware
+├── mock_hardware_framework.py         # Development without hardware dependencies
 ├── performance_benchmarking.py        # Realistic performance testing
 ├── clinical_application_demo.py       # Focused clinical validation
-└── README.md                          # This file
+├── phase3_completion_demo.py          # Digital brain twin implementation
+├── brain_visualization_demo.py        # 3D visualization and interfaces
+├── api_integration_demo.py            # REST API and WebSocket streaming
+├── real_time_acquisition_demo.py      # Multi-modal data acquisition
+├── neural_processing_demo.py           # Signal processing pipeline
+├── brain_simulation_demo.py            # Neural network simulation
+└── README.md                          # This comprehensive guide
 ```
+
+## 📋 Individual Demo Documentation
+
+Each demo has detailed documentation with testing instructions, expected outputs, and educational objectives:
+
+### 🚀 Getting Started
+- **[`quick_start.py`](./docs/quick_start_README.md)** - Minimal Brain-Forge setup and basic functionality
+- **[`brain_forge_complete.py`](./docs/brain_forge_complete_README.md)** - Complete system demonstration with all components
+
+### 🔧 Strategic Framework  
+- **[`single_modality_demo.py`](./docs/single_modality_demo_README.md)** - Incremental development with Kernel Flow2 focus
+- **[`mock_hardware_framework.py`](./docs/mock_hardware_framework_README.md)** - Hardware abstraction and partnership readiness
+- **[`performance_benchmarking.py`](./docs/performance_benchmarking_README.md)** - Realistic performance targets and validation
+
+### 🏥 Clinical Applications
+- **[`clinical_application_demo.py`](./docs/clinical_application_demo_README.md)** - Epilepsy seizure detection with FDA pathway
+- **[`phase3_completion_demo.py`](./docs/phase3_completion_demo_README.md)** - Digital brain twin and patient-specific modeling
+
+### 🧠 Advanced Processing
+- **[`neural_processing_demo.py`](./docs/neural_processing_demo_README.md)** - Advanced signal processing and ML integration
+- **[`brain_simulation_demo.py`](./docs/brain_simulation_demo_README.md)** - Neural network simulation with Brian2/NEST
+- **[`real_time_acquisition_demo.py`](./docs/real_time_acquisition_demo_README.md)** - Multi-modal sensor synchronization
+
+### 📊 Visualization & Integration
+- **[`brain_visualization_demo.py`](./docs/brain_visualization_demo_README.md)** - 3D brain visualization and real-time dashboards
+- **[`api_integration_demo.py`](./docs/api_integration_demo_README.md)** - REST API, WebSocket streaming, and SDK generation
+
+### 📚 Interactive Tutorials
+- **[`01_Interactive_Data_Acquisition.ipynb`](./docs/interactive_data_acquisition_README.md)** - Interactive data acquisition tutorial
+- **[`02_Incremental_Development_Strategy.ipynb`](./docs/incremental_development_strategy_README.md)** - Strategic development approach with interactive analysis
 
 ## 🎯 Strategic Development Approach
 
