@@ -66,6 +66,17 @@
 			"group": "build",
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "Final Implementation Validation",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"validate_implementation.py"
+			],
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }
