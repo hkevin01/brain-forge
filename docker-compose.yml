@@ -1,0 +1,194 @@
+# Brain-Forge Multi-Modal BCI Platform
+# Docker Compose configuration for development and production deployment
+
+version: "3.8"
+
+services:
+  # Brain-Forge API Service
+  brain-forge-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: brain-forge-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./src:/home/brain-forge/src
+      - ./configs:/home/brain-forge/configs
+      - ./data:/home/brain-forge/data
+      - ./logs:/home/brain-forge/logs
+      - ./results:/home/brain-forge/results
+    environment:
+      - BRAIN_FORGE_ENV=${BRAIN_FORGE_ENV:-development}
+      - API_HOST=${API_HOST:-0.0.0.0}
+      - API_PORT=${API_PORT:-8000}
+      - DEBUG=${DEBUG:-true}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./brain_forge.db}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - OMP_DEVICE_COUNT=${OMP_DEVICE_COUNT:-4}
+      - KERNEL_HELMET_COUNT=${KERNEL_HELMET_COUNT:-2}
+      - ACCELEROMETER_SAMPLING_RATE=${ACCELEROMETER_SAMPLING_RATE:-1000}
+      - PROCESSING_BUFFER_SIZE=${PROCESSING_BUFFER_SIZE:-1024}
+      - PROCESSING_OVERLAP=${PROCESSING_OVERLAP:-0.5}
+      - GPU_ENABLED=${GPU_ENABLED:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - WEBSOCKET_MAX_CONNECTIONS=${WEBSOCKET_MAX_CONNECTIONS:-100}
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for caching and WebSocket management
+  redis:
+    image: redis:7-alpine
+    container_name: brain-forge-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL for data storage
+  postgres:
+    image: postgres:15-alpine
+    container_name: brain-forge-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-brain_forge}
+      - POSTGRES_USER=${POSTGRES_USER:-brain_forge}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-brain_forge_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./tools/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql:ro
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-brain_forge} -d ${POSTGRES_DB:-brain_forge}",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Jupyter Lab for development and analysis
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: brain-forge-jupyter
+    restart: unless-stopped
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    volumes:
+      - ./:/home/brain-forge/workspace
+      - ./notebooks:/home/brain-forge/notebooks
+      - ./data:/home/brain-forge/data
+      - ./results:/home/brain-forge/results
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-brain-forge-token}
+    command: >
+      bash -c "
+      pip install --user jupyterlab &&
+      jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='${JUPYTER_TOKEN:-brain-forge-token}'
+      "
+    networks:
+      - brain-forge-network
+    depends_on:
+      - brain-forge-api
+
+  # Nginx reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    container_name: brain-forge-nginx
+    restart: unless-stopped
+    ports:
+      - "${NGINX_HTTP_PORT:-80}:80"
+      - "${NGINX_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./tools/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./tools/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - brain-forge-api
+    networks:
+      - brain-forge-network
+    profiles:
+      - production
+
+  # Monitoring with Prometheus (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: brain-forge-prometheus
+    restart: unless-stopped
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./tools/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--web.enable-lifecycle"
+    networks:
+      - brain-forge-network
+    profiles:
+      - monitoring
+
+  # Grafana for visualization (optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: brain-forge-grafana
+    restart: unless-stopped
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - brain-forge-network
+    profiles:
+      - monitoring
+
+# Volumes for persistent data
+volumes:
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+# Network configuration
+networks:
+  brain-forge-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

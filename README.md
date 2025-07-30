@@ -707,3 +707,146 @@ If you use Brain-Forge in your research, please cite:
 [⭐ Star this repo](https://github.com/hkevin01/brain-forge) | [🍴 Fork it](https://github.com/hkevin01/brain-forge/fork) | [📝 Contribute](CONTRIBUTING.md)
 
 </div>
+
+### 🌐 **REST API & Real-time Streaming** (✅ IMPLEMENTED)
+
+Brain-Forge provides a complete FastAPI-based REST API with WebSocket support for real-time brain data streaming and external system integration.
+
+#### **FastAPI Server**
+
+Start the Brain-Forge API server:
+
+```bash
+# Start the API server
+python src/api/rest_api.py
+
+# Or with custom configuration
+uvicorn src.api.rest_api:app --host 0.0.0.0 --port 8000 --reload
+```
+
+The API will be available at `http://localhost:8000` with automatic OpenAPI documentation at `/docs`.
+
+#### **Core API Endpoints**
+
+```python
+import requests
+import asyncio
+import websockets
+
+# API Base URL
+API_BASE = "http://localhost:8000"
+
+# 1. System Health Check
+response = requests.get(f"{API_BASE}/health")
+print(f"System Status: {response.json()['data']['system_status']}")
+
+# 2. Start Brain Data Acquisition
+acquisition_request = {
+    "duration": 30.0,  # seconds
+    "channels": ["OPM_001", "OPM_002", "OPM_003"],
+    "sampling_rate": 1000.0,
+    "enable_compression": True
+}
+
+response = requests.post(f"{API_BASE}/acquisition/start", json=acquisition_request)
+acquisition_id = response.json()['data']['acquisition_id']
+print(f"Acquisition started: {acquisition_id}")
+
+# 3. Process Brain Data 
+processing_request = {
+    "filter_low": 1.0,
+    "filter_high": 100.0,
+    "enable_artifact_removal": True,
+    "compression_ratio": 5.0
+}
+
+response = requests.post(f"{API_BASE}/processing/analyze", json=processing_request)
+processing_results = response.json()['data']
+print(f"Processing completed: {processing_results['processing_id']}")
+
+# 4. Transfer Learning Operations
+pattern_request = {
+    "source_subject_id": "subject_001",
+    "target_subject_id": "subject_002", 
+    "pattern_type": "motor",
+    "adaptation_threshold": 0.8
+}
+
+response = requests.post(f"{API_BASE}/transfer_learning/transfer_pattern", json=pattern_request)
+transfer_result = response.json()['data']
+print(f"Pattern transfer accuracy: {transfer_result['transfer_accuracy']:.2%}")
+
+# 5. Real-time Brain Activity Visualization
+response = requests.get(f"{API_BASE}/visualization/brain_activity")
+activity_data = response.json()['data']
+print(f"Current brain state: {activity_data['brain_state']}")
+print(f"Dominant frequency: {activity_data['dominant_frequency']}")
+```
+
+#### **WebSocket Real-time Streaming**
+
+```python
+import asyncio
+import websockets
+import json
+
+async def stream_brain_data():
+    """Stream real-time brain data via WebSocket"""
+    uri = "ws://localhost:8000/ws/realtime"
+    
+    async with websockets.connect(uri) as websocket:
+        print("Connected to Brain-Forge WebSocket stream")
+        
+        # Receive real-time brain data
+        async for message in websocket:
+            data = json.loads(message)
+            
+            # Process real-time data
+            timestamp = data['timestamp']
+            signal_data = data['signal_data']  # Shape: (64, 10)
+            quality = data['quality_metrics']['signal_quality']
+            
+            print(f"[{timestamp}] Signal quality: {quality:.2%}")
+            print(f"Data shape: {len(signal_data)} channels, {len(signal_data[0])} samples")
+
+# Run WebSocket client
+asyncio.run(stream_brain_data())
+```
+
+#### **Available API Endpoints**
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | API information and capabilities |
+| `/health` | GET | System health check |
+| `/acquisition/start` | POST | Start brain data acquisition |
+| `/acquisition/stop` | POST | Stop brain data acquisition |
+| `/processing/analyze` | POST | Analyze brain data with processing pipeline |
+| `/transfer_learning/extract_patterns` | POST | Extract brain patterns for transfer learning |
+| `/transfer_learning/transfer_pattern` | POST | Transfer patterns between subjects |
+| `/visualization/brain_activity` | GET | Get current brain activity for visualization |
+| `/ws/realtime` | WebSocket | Real-time brain data streaming |
+
+#### **API Features**
+
+- **🔍 OpenAPI Documentation**: Automatic API docs at `/docs` and `/redoc`
+- **🔒 Input Validation**: Pydantic models for request/response validation
+- **⚡ Async Processing**: Non-blocking operations with FastAPI async support
+- **🌊 WebSocket Streaming**: Real-time data streaming at 10Hz update rate
+- **📊 Structured Responses**: Consistent JSON response format with success/error handling
+- **🔧 Error Handling**: Comprehensive HTTP status codes and error messages
+- **📈 Performance Monitoring**: Built-in request timing and performance metrics
+
+#### **Integration Examples**
+
+The `examples/api_integration_demo.py` provides a complete demonstration of:
+- REST API usage patterns
+- WebSocket real-time streaming
+- Clinical system integration
+- External application interfaces
+- SDK generation for multiple languages
+
+Run the demo:
+```bash
+python examples/api_integration_demo.py
+```
