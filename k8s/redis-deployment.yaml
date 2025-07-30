@@ -1,0 +1,175 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: cache
+    app.kubernetes.io/part-of: brain-forge
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/component: cache
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        imagePullPolicy: IfNotPresent
+        command:
+          - redis-server
+          - /etc/redis/redis.conf
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: REDIS_PASSWORD
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        - name: redis-config
+          mountPath: /etc/redis
+        - name: redis-data
+          mountPath: /data
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - --no-auth-warning
+            - -a
+            - $(REDIS_PASSWORD)
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - --no-auth-warning
+            - -a
+            - $(REDIS_PASSWORD)
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        securityContext:
+          runAsUser: 999
+          runAsGroup: 999
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-config
+          defaultMode: 0644
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: cache
+data:
+  redis.conf: |
+    # Redis configuration for Brain-Forge
+    
+    # Network
+    bind 0.0.0.0
+    port 6379
+    tcp-backlog 511
+    timeout 300
+    tcp-keepalive 300
+    
+    # General
+    daemonize no
+    supervised no
+    pidfile /var/run/redis_6379.pid
+    loglevel notice
+    logfile ""
+    databases 16
+    
+    # Security
+    requirepass ${REDIS_PASSWORD}
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    rename-command DEBUG ""
+    rename-command CONFIG ""
+    rename-command EVAL ""
+    
+    # Memory management
+    maxmemory 1gb
+    maxmemory-policy allkeys-lru
+    maxmemory-samples 5
+    
+    # Persistence
+    save 900 1
+    save 300 10
+    save 60 10000
+    stop-writes-on-bgsave-error yes
+    rdbcompression yes
+    rdbchecksum yes
+    dbfilename dump.rdb
+    dir /data
+    
+    # Append only file
+    appendonly yes
+    appendfilename "appendonly.aof"
+    appendfsync everysec
+    no-appendfsync-on-rewrite no
+    auto-aof-rewrite-percentage 100
+    auto-aof-rewrite-min-size 64mb
+    aof-load-truncated yes
+    aof-use-rdb-preamble yes
+    
+    # Slow log
+    slowlog-log-slower-than 10000
+    slowlog-max-len 128
+    
+    # Client management
+    maxclients 10000

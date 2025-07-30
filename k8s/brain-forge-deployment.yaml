@@ -1,0 +1,283 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brain-forge-api
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge-api
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: brain-forge
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: brain-forge-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: brain-forge-api
+        app.kubernetes.io/component: api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: brain-forge-api
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: brain-forge-api
+        image: ghcr.io/brain-forge/brain-forge:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        # Configuration from ConfigMap
+        - name: BRAIN_FORGE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: BRAIN_FORGE_ENV
+        - name: API_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: API_HOST
+        - name: API_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: API_PORT
+        - name: DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: DEBUG
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: LOG_LEVEL
+        
+        # Database configuration
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: DATABASE_URL
+        
+        # Redis configuration
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: REDIS_URL
+        
+        # Security configuration
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: JWT_SECRET_KEY
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: ENCRYPTION_KEY
+        
+        # Hardware configuration
+        - name: OMP_DEVICE_COUNT
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: OMP_DEVICE_COUNT
+        - name: KERNEL_HELMET_COUNT
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: KERNEL_HELMET_COUNT
+        
+        # Processing configuration
+        - name: PROCESSING_BUFFER_SIZE
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: PROCESSING_BUFFER_SIZE
+        - name: GPU_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: GPU_ENABLED
+        
+        # WebSocket configuration
+        - name: WEBSOCKET_MAX_CONNECTIONS
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: WEBSOCKET_MAX_CONNECTIONS
+        
+        volumeMounts:
+        - name: data-volume
+          mountPath: /home/brain-forge/data
+        - name: logs-volume
+          mountPath: /home/brain-forge/logs
+        - name: results-volume
+          mountPath: /home/brain-forge/results
+        - name: tmp-volume
+          mountPath: /tmp
+        
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_BIND_SERVICE
+      
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: brain-forge-data-pvc
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: brain-forge-logs-pvc
+      - name: results-volume
+        persistentVolumeClaim:
+          claimName: brain-forge-results-pvc
+      - name: tmp-volume
+        emptyDir: {}
+      
+      initContainers:
+      - name: wait-for-db
+        image: postgres:15-alpine
+        command:
+          - sh
+          - -c
+          - |
+            until pg_isready -h postgres-service -p 5432 -U $DATABASE_USER; do
+              echo "Waiting for database..."
+              sleep 2
+            done
+            echo "Database is ready!"
+        env:
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: DATABASE_USER
+      
+      - name: wait-for-redis
+        image: redis:7-alpine
+        command:
+          - sh
+          - -c
+          - |
+            until redis-cli -h redis-service -p 6379 -a $REDIS_PASSWORD ping; do
+              echo "Waiting for Redis..."
+              sleep 2
+            done
+            echo "Redis is ready!"
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: REDIS_PASSWORD
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: brain-forge-api
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge-api
+    app.kubernetes.io/component: api
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: brain-forge-data-pvc
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge-api
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: brain-forge-logs-pvc
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge-api
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: brain-forge-results-pvc
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge-api
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi

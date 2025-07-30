@@ -1,0 +1,146 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: brain-forge-ingress
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge-api
+    app.kubernetes.io/component: ingress
+  annotations:
+    # NGINX Ingress Controller annotations
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    
+    # Rate limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-connections: "10"
+    
+    # Security headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Content-Type-Options nosniff;
+      add_header X-Frame-Options DENY;
+      add_header X-XSS-Protection "1; mode=block";
+      add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin";
+      add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' wss: ws:;";
+    
+    # WebSocket support
+    nginx.ingress.kubernetes.io/proxy-set-headers: |
+      Host $host;
+      X-Real-IP $remote_addr;
+      X-Forwarded-For $proxy_add_x_forwarded_for;
+      X-Forwarded-Proto $scheme;
+      Upgrade $http_upgrade;
+      Connection "upgrade";
+    
+    # SSL certificate management (cert-manager)
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/acme-challenge-type: http01
+    
+    # Alternative annotations for other ingress controllers:
+    
+    # Traefik annotations
+    # traefik.ingress.kubernetes.io/router.middlewares: brain-forge-security@kubernetescrd
+    # traefik.ingress.kubernetes.io/router.tls: "true"
+    
+    # AWS ALB annotations
+    # kubernetes.io/ingress.class: alb
+    # alb.ingress.kubernetes.io/scheme: internet-facing
+    # alb.ingress.kubernetes.io/target-type: ip
+    # alb.ingress.kubernetes.io/ssl-redirect: '443'
+    
+    # GCP GCE annotations
+    # kubernetes.io/ingress.class: gce
+    # kubernetes.io/ingress.global-static-ip-name: brain-forge-ip
+    
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - brain-forge.example.com
+    - api.brain-forge.example.com
+    secretName: brain-forge-tls
+  rules:
+  - host: brain-forge.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: brain-forge-api-service
+            port:
+              number: 8000
+  - host: api.brain-forge.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: brain-forge-api-service
+            port:
+              number: 8000
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: brain-forge-api-service
+            port:
+              number: 8000
+      - path: /docs
+        pathType: Prefix
+        backend:
+          service:
+            name: brain-forge-api-service
+            port:
+              number: 8000
+      - path: /redoc
+        pathType: Prefix
+        backend:
+          service:
+            name: brain-forge-api-service
+            port:
+              number: 8000
+
+---
+# Alternative ingress for staging environment
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: brain-forge-staging-ingress
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge-api
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/environment: staging
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    # Basic auth for staging environment
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: brain-forge-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Brain-Forge Staging Environment'
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - staging.brain-forge.example.com
+    secretName: brain-forge-staging-tls
+  rules:
+  - host: staging.brain-forge.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: brain-forge-api-service
+            port:
+              number: 8000

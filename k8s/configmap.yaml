@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: brain-forge-config
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: brain-forge
+    app.kubernetes.io/component: config
+data:
+  # API Configuration
+  API_HOST: "0.0.0.0"
+  API_PORT: "8000"
+  DEBUG: "false"
+  LOG_LEVEL: "INFO"
+  BRAIN_FORGE_ENV: "production"
+  
+  # Database Configuration
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "brain_forge"
+  
+  # Redis Configuration
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  
+  # Hardware Configuration
+  OMP_DEVICE_COUNT: "4"
+  KERNEL_HELMET_COUNT: "2"
+  ACCELEROMETER_SAMPLING_RATE: "1000"
+  
+  # Processing Configuration
+  PROCESSING_BUFFER_SIZE: "1024"
+  PROCESSING_OVERLAP: "0.5"
+  GPU_ENABLED: "false"
+  
+  # WebSocket Configuration
+  WEBSOCKET_MAX_CONNECTIONS: "200"
+  
+  # Security Configuration
+  SESSION_TIMEOUT_MINUTES: "60"
+  MAX_LOGIN_ATTEMPTS: "5"
+  LOCKOUT_DURATION_MINUTES: "30"
+  CORS_ORIGINS: "https://brain-forge.example.com"
+  
+  # HIPAA Compliance
+  AUDIT_LOG_RETENTION_DAYS: "2555"  # 7 years
+  ENCRYPTION_ALGORITHM: "AES-256-GCM"
+  
+  # Rate Limiting
+  API_RATE_LIMIT_PER_MINUTE: "100"
+  LOGIN_RATE_LIMIT_PER_MINUTE: "5"

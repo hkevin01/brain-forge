@@ -1,0 +1,186 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: brain-forge
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate  # Ensure only one instance for data consistency
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: postgres
+        app.kubernetes.io/component: database
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: brain-forge-config
+              key: DATABASE_NAME
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: DATABASE_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: brain-forge-secrets
+              key: DATABASE_PASSWORD
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+        - name: postgres-init
+          mountPath: /docker-entrypoint-initdb.d
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - $(POSTGRES_USER)
+            - -d
+            - $(POSTGRES_DB)
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - $(POSTGRES_USER)
+            - -d
+            - $(POSTGRES_DB)
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+      - name: postgres-init
+        configMap:
+          name: postgres-init-scripts
+          defaultMode: 0755
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/component: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  # Uncomment and specify storage class for your cluster
+  # storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: brain-forge
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/component: database
+data:
+  init-db.sql: |
+    -- Brain-Forge Database Initialization
+    
+    -- Create TimescaleDB extension for time-series data
+    CREATE EXTENSION IF NOT EXISTS timescaledb;
+    
+    -- Create brain data table
+    CREATE TABLE IF NOT EXISTS brain_data (
+        id SERIAL PRIMARY KEY,
+        session_id VARCHAR(255) NOT NULL,
+        timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        device_type VARCHAR(50) NOT NULL,
+        channel_data JSONB NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    
+    -- Convert to hypertable for time-series optimization
+    SELECT create_hypertable('brain_data', 'timestamp', if_not_exists => TRUE);
+    
+    -- Create users table
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        permissions JSONB NOT NULL DEFAULT '[]',
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    
+    -- Create sessions table
+    CREATE TABLE IF NOT EXISTS sessions (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id INTEGER REFERENCES users(id),
+        name VARCHAR(255) NOT NULL,
+        status VARCHAR(50) NOT NULL DEFAULT 'created',
+        metadata JSONB DEFAULT '{}',
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+    
+    -- Create audit log table for HIPAA compliance
+    CREATE TABLE IF NOT EXISTS audit_logs (
+        id SERIAL PRIMARY KEY,
+        timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        user_id INTEGER REFERENCES users(id),
+        action VARCHAR(255) NOT NULL,
+        resource VARCHAR(255) NOT NULL,
+        details JSONB DEFAULT '{}',
+        ip_address INET,
+        user_agent TEXT
+    );
+    
+    -- Convert audit logs to hypertable
+    SELECT create_hypertable('audit_logs', 'timestamp', if_not_exists => TRUE);
+    
+    -- Create indexes for performance
+    CREATE INDEX IF NOT EXISTS idx_brain_data_session_id ON brain_data(session_id);
+    CREATE INDEX IF NOT EXISTS idx_brain_data_device_type ON brain_data(device_type);
+    CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
+    CREATE INDEX IF NOT EXISTS idx_audit_logs_user_id ON audit_logs(user_id);
+    CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
+    
+    -- Set up data retention policy (7 years for HIPAA compliance)
+    SELECT add_retention_policy('brain_data', INTERVAL '7 years', if_not_exists => TRUE);
+    SELECT add_retention_policy('audit_logs', INTERVAL '7 years', if_not_exists => TRUE);
