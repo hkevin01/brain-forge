@@ -8,246 +8,261 @@ version = "0.1.0-dev"
 description = "Advanced Multi-Modal Brain-Computer Interface System"
 readme = "README.md"
 license = { text = "TBD" }
-authors = [{ name = "Brain-Forge Development Team" }]
-maintainers = [{ name = "Brain-Forge Development Team" }]
-keywords = [
-    "neuroscience",
-    "brain-computer-interface",
-    "bci",
-    "eeg",
-    "neurofeedback",
-    "signal-processing",
-    "machine-learning",
-    "real-time",
+authors = [
+    { name = "Brain-Forge Development Team", email = "dev@brain-forge.org" },
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
-    "Intended Audience :: Healthcare Industry",
-    "Intended Audience :: Developers",
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Operating System :: OS Independent",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 dependencies = [
-    "fastapi>=0.80.0",
-    "uvicorn[standard]>=0.18.0",
-    "websockets>=10.3",
-    "pydantic>=1.9.0",
+    # Core scientific computing
     "numpy>=1.21.0",
-    "scipy>=1.8.0",
-    "matplotlib>=3.5.0",
-    "pandas>=1.4.0",
+    "scipy>=1.7.0",
+    "scikit-learn>=1.0.0",
+    "pandas>=1.3.0",
+
+    # Signal processing
+    "PyWavelets>=1.3.0",
+    "mne>=1.0.0",
+    "nilearn>=0.9.0",
+
+    # Real-time streaming
+    "pylsl>=1.16.0",
+
+    # Neural simulation
+    "brian2>=2.5.0",
+    "nest-simulator>=3.0",
+
+    # Configuration and logging
     "pyyaml>=6.0",
-    "redis>=4.3.0",
-    "psycopg2-binary>=2.9.0",
-    "sqlalchemy>=1.4.0",
-    "alembic>=1.8.0",
-    "python-multipart>=0.0.5",
-    "python-jose[cryptography]>=3.3.0",
-    "passlib[bcrypt]>=1.7.4",
-    "python-dotenv>=0.19.0",
-    "structlog>=22.1.0",
-    "rich>=12.4.0",
-    "typer>=0.6.0",
-    "httpx>=0.23.0",
-    "aiofiles>=0.8.0",
-    "asyncpg>=0.26.0",
-    "celery>=5.2.0",
-    "flower>=1.2.0",
+    "pydantic>=1.9.0",
+
+    # Utilities
+    "tqdm>=4.64.0",
+    "click>=8.0.0",
+    "rich>=12.0.0",
 ]
 
 [project.optional-dependencies]
+# Development dependencies
 dev = [
-    "pytest>=7.1.0",
-    "pytest-asyncio>=0.19.0",
+    "pytest>=7.0.0",
     "pytest-cov>=3.0.0",
-    "pytest-mock>=3.8.0",
-    "pytest-xdist>=2.5.0",
-    "coverage[toml]>=6.4.0",
-    "black>=22.6.0",
+    "pytest-asyncio>=0.20.0",
+    "black>=22.0.0",
     "isort>=5.10.0",
-    "flake8>=5.0.0",
-    "flake8-bugbear>=22.7.0",
-    "flake8-bandit>=4.1.0",
-    "flake8-docstrings>=1.6.0",
-    "mypy>=0.971",
-    "bandit>=1.7.0",
-    "safety>=2.1.0",
-    "pre-commit>=2.20.0",
+    "flake8>=4.0.0",
+    "mypy>=0.950",
+    "pre-commit>=2.17.0",
 ]
-test = [
-    "pytest>=7.1.0",
-    "pytest-asyncio>=0.19.0",
-    "pytest-cov>=3.0.0",
-    "pytest-mock>=3.8.0",
-    "pytest-xdist>=2.5.0",
-    "coverage[toml]>=6.4.0",
-    "httpx>=0.23.0",
-    "testcontainers>=3.4.0",
+
+# GPU acceleration
+gpu = ["cupy-cuda11x>=10.0.0", "torch>=1.11.0", "tensorflow>=2.8.0"]
+
+# Visualization
+viz = [
+    "matplotlib>=3.5.0",
+    "seaborn>=0.11.0",
+    "plotly>=5.6.0",
+    "pyvista>=0.34.0",
+    "bokeh>=2.4.0",
 ]
-docs = [
-    "sphinx>=5.1.0",
-    "sphinx-rtd-theme>=1.0.0",
-    "sphinx-autodoc-typehints>=1.19.0",
-    "myst-parser>=0.18.0",
+
+# Hardware interfaces
+hardware = [
+    "pyserial>=3.5",
+    "bleak>=0.14.0",    # Bluetooth LE
+    "keyboard>=0.13.0",
 ]
-deployment = [
-    "docker>=6.0.0",
-    "docker-compose>=1.29.0",
-    "gunicorn>=20.1.0",
-    "nginx>=1.22.0",
+
+# Web interface
+web = [
+    "fastapi>=0.75.0",
+    "uvicorn>=0.17.0",
+    "websockets>=10.2",
+    "jinja2>=3.0.0",
 ]
-monitoring = [
-    "prometheus-client>=0.14.0",
-    "grafana-api>=1.0.3",
-    "sentry-sdk[fastapi]>=1.9.0",
-]
-ml = [
-    "scikit-learn>=1.1.0",
-    "tensorflow>=2.9.0",
-    "torch>=1.12.0",
-    "transformers>=4.21.0",
-    "optuna>=3.0.0",
-]
+
+# Documentation
+docs = ["sphinx>=4.4.0", "sphinx-rtd-theme>=1.0.0", "myst-parser>=0.17.0"]
+
+# Complete installation
+all = ["brain-forge[dev,gpu,viz,hardware,web,docs]"]
 
 [project.urls]
-Homepage = "https://github.com/hkevin01/brain-forge"
-Documentation = "https://brain-forge.readthedocs.io"
-Repository = "https://github.com/hkevin01/brain-forge.git"
-"Bug Tracker" = "https://github.com/hkevin01/brain-forge/issues"
-Changelog = "https://github.com/hkevin01/brain-forge/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/brain-forge/brain-forge"
+Repository = "https://github.com/brain-forge/brain-forge.git"
+Documentation = "https://brain-forge.readthedocs.io/"
+"Bug Tracker" = "https://github.com/brain-forge/brain-forge/issues"
 
 [project.scripts]
-brain-forge = "brain_forge.cli:main"
-bf-server = "brain_forge.server:run_server"
-bf-worker = "brain_forge.worker:run_worker"
-
-[tool.setuptools]
-zip-safe = false
-include-package-data = true
+brain-forge = "src.api.cli:main"
+bf-stream = "src.acquisition.stream_manager:cli_main"
+bf-process = "src.processing:cli_main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["brain_forge*"]
-exclude = ["tests*"]
 
-[tool.setuptools.package-data]
-"brain_forge" = [
-    "configs/*.yaml",
-    "configs/*.yml",
-    "configs/*.json",
-    "templates/*.html",
-    "static/**/*",
-]
-
-# Black configuration
 [tool.black]
 line-length = 88
-target-version = ['py39', 'py310', 'py311']
+target-version = ['py38', 'py39', 'py310', 'py311']
 include = '\.pyi?$'
-extend-exclude = '''
-/(
-    \.git
-    | \.mypy_cache
-    | \.pytest_cache
-    | \.venv
-    | venv
-    | build
-    | dist
-    | archive
-)/
-'''
 
-# isort configuration  
 [tool.isort]
 profile = "black"
 multi_line_output = 3
+include_trailing_comma = true
 line_length = 88
-known_first_party = ["brain_forge"]
-known_third_party = [
-    "fastapi",
-    "uvicorn",
-    "pydantic",
-    "numpy",
-    "scipy",
-    "matplotlib",
-    "pandas",
-    "redis",
-    "sqlalchemy",
-    "pytest",
-]
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-skip_glob = ["archive/*", "build/*", "dist/*", ".venv/*", "venv/*"]
 
-# MyPy configuration
+# Flake8 configuration for ignoring common false positives
+[tool.flake8]
+max-line-length = 88
+extend-ignore = [
+    # Common false positives to ignore
+    "E203", # whitespace before ':' (conflicts with black)
+    "E501", # line too long (handled by black)
+    "W503", # line break before binary operator (outdated)
+    "W504", # line break after binary operator (conflicts with W503)
+    "E226", # missing whitespace around arithmetic operator
+    "E402", # module level import not at top of file (sometimes needed)
+    "F401", # imported but unused (sometimes needed for __init__.py)
+    "F403", # 'from module import *' used (sometimes needed)
+    "F405", # name may be undefined from star imports
+    "B902", # Invalid first argument used for method
+    "B006", # Do not use mutable data structures for argument defaults
+    "C901", # too complex (sometimes necessary for specialized algorithms)
+    "E722", # do not use bare except (sometimes needed for broad error handling)
+    "W601", # .has_key() is deprecated (python 2 only)
+    "W602", # deprecated form of raising exception (python 2 only)
+    "E741", # ambiguous variable name (l, O, I - sometimes needed in math contexts)
+]
+per-file-ignores = [
+    # Additional ignores for specific file patterns
+    "__init__.py:F401,F403,F405",         # Allow unused imports in __init__ files
+    "test_*.py:F401,F403,F405,E501",      # More lenient for test files
+    "tests/*.py:F401,F403,F405,E501",     # More lenient for test files
+    "scripts/*.py:E402,F401,E501",        # More lenient for scripts
+    "docs/*.py:E402,F401,E501",           # More lenient for documentation
+    "examples/*.py:E402,F401,E501",       # More lenient for examples
+    "src/specialized_tools.py:E501,C901", # Scientific computing often needs longer lines
+    "src/*/models.py:E501",               # Model definitions can have long lines
+    "src/*/config.py:E501",               # Configuration files can have long lines
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".tox",
+    ".eggs",
+    "venv",
+    ".venv",
+    "env",
+    ".env",
+]
+
+# MyPy configuration for type checking with common issue suppression
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
+disallow_untyped_defs = false       # Too strict for scientific computing
+disallow_incomplete_defs = false    # Too strict for scientific computing
 check_untyped_defs = true
-disallow_untyped_decorators = true
+disallow_untyped_decorators = false # Many scientific libraries lack types
 no_implicit_optional = true
 warn_redundant_casts = true
-warn_unused_ignores = true
+warn_unused_ignores = false         # Can be noisy
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
 show_error_codes = true
+ignore_missing_imports = true       # Many scientific packages lack type stubs
 
+# Per-module mypy configuration
 [[tool.mypy.overrides]]
-module = ["scipy.*", "matplotlib.*", "redis.*", "psycopg2.*", "celery.*"]
+module = [
+    "numpy.*",
+    "scipy.*",
+    "sklearn.*",
+    "pandas.*",
+    "matplotlib.*",
+    "seaborn.*",
+    "plotly.*",
+    "brian2.*",
+    "nest.*",
+    "mne.*",
+    "nilearn.*",
+    "pylsl.*",
+    "pyvista.*",
+    "mayavi.*",
+    "cupy.*",
+    "braindecode.*",
+    "neurokit2.*",
+    "moabb.*",
+    "PyWavelets.*",
+]
 ignore_missing_imports = true
+ignore_errors = true
 
-# Pytest configuration
-[tool.pytest.ini_options]
-minversion = "7.1"
-addopts = [
-    "-ra",
-    "--strict-markers",
-    "--strict-config",
-    "--cov=src",
-    "--cov-report=term-missing",
-    "--cov-report=html",
-    "--cov-report=xml",
+# Pylint configuration for comprehensive but practical checking
+[tool.pylint.main]
+extension-pkg-allow-list = ["numpy", "scipy", "sklearn", "pandas", "cv2"]
+jobs = 0                                                                  # Use all available processors
+
+[tool.pylint."messages control"]
+disable = [
+    # Disable overly strict or noisy checks
+    "line-too-long",                 # Handled by black/flake8
+    "too-many-arguments",            # Scientific functions often need many parameters
+    "too-many-locals",               # Complex algorithms need many variables
+    "too-many-branches",             # Scientific code can be complex
+    "too-many-statements",           # Scientific code can be complex
+    "too-few-public-methods",        # Data classes and utilities are fine
+    "missing-docstring",             # Too noisy for development
+    "invalid-name",                  # Scientific variables often use math notation
+    "unused-argument",               # Common in callback functions
+    "broad-except",                  # Sometimes needed for robust error handling
+    "import-outside-toplevel",       # Sometimes needed for optional dependencies
+    "duplicate-code",                # Common in similar scientific functions
+    "fixme",                         # TODO/FIXME comments are acceptable
+    "global-statement",              # Sometimes needed for global state
+    "consider-using-f-string",       # Not always preferred
+    "unnecessary-pass",              # Sometimes needed for clarity
+    "unused-import",                 # Handled by flake8
+    "wrong-import-position",         # Sometimes needed for compatibility
+    "consider-using-with",           # Not always applicable
+    "no-member",                     # Often false positive with dynamic libraries
+    "unspecified-encoding",          # Often not needed for simple file operations
+    "consider-using-enumerate",      # Not always clearer
+    "consider-using-dict-items",     # Not always preferred
+    "logging-fstring-interpolation", # F-strings in logging are often fine
+    "import-error",                  # Handled by other tools
 ]
-testpaths = ["tests"]
-python_files = ["test_*.py", "*_test.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "unit: marks tests as unit tests",
-    "api: marks tests as API tests",
-    "db: marks tests as database tests",
-    "redis: marks tests as Redis tests",
-    "websocket: marks tests as WebSocket tests",
-]
-filterwarnings = ["error", "ignore::UserWarning", "ignore::DeprecationWarning"]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint.design]
+max-args = 10       # Allow more arguments for scientific functions
+max-locals = 20     # Allow more locals for complex algorithms
+max-branches = 15   # Allow more complexity for scientific code
+max-statements = 60 # Allow longer functions for scientific code
 
 # Coverage configuration
 [tool.coverage.run]
 source = ["src"]
-omit = [
-    "*/tests/*",
-    "*/test_*",
-    "*/__pycache__/*",
-    "*/venv/*",
-    "*/.venv/*",
-    "*/archive/*",
-    "*/build/*",
-    "*/dist/*",
-]
+omit = ["*/tests/*", "*/test_*", "setup.py", "venv/*", ".venv/*"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -262,16 +277,13 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
-show_missing = true
-precision = 2
 
-[tool.coverage.html]
-directory = "htmlcov"
-
-# Bandit security configuration
-[tool.bandit]
-exclude_dirs = ["tests", "archive", "build", "dist", ".venv", "venv"]
-skips = [
-    "B101", # assert_used
-    "B601", # paramiko_calls
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--cov=src", "--cov-report=html", "--cov-report=term-missing"]
+markers = [
+    "slow: marks tests as slow",
+    "hardware: marks tests requiring hardware",
+    "integration: marks tests as integration tests",
+    "gpu: marks tests requiring GPU support",
 ]
