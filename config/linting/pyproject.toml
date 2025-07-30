@@ -1,0 +1,277 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brain-forge"
+version = "0.1.0-dev"
+description = "Advanced Multi-Modal Brain-Computer Interface System"
+readme = "README.md"
+license = { text = "TBD" }
+authors = [{ name = "Brain-Forge Development Team" }]
+maintainers = [{ name = "Brain-Forge Development Team" }]
+keywords = [
+    "neuroscience",
+    "brain-computer-interface",
+    "bci",
+    "eeg",
+    "neurofeedback",
+    "signal-processing",
+    "machine-learning",
+    "real-time",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.80.0",
+    "uvicorn[standard]>=0.18.0",
+    "websockets>=10.3",
+    "pydantic>=1.9.0",
+    "numpy>=1.21.0",
+    "scipy>=1.8.0",
+    "matplotlib>=3.5.0",
+    "pandas>=1.4.0",
+    "pyyaml>=6.0",
+    "redis>=4.3.0",
+    "psycopg2-binary>=2.9.0",
+    "sqlalchemy>=1.4.0",
+    "alembic>=1.8.0",
+    "python-multipart>=0.0.5",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-dotenv>=0.19.0",
+    "structlog>=22.1.0",
+    "rich>=12.4.0",
+    "typer>=0.6.0",
+    "httpx>=0.23.0",
+    "aiofiles>=0.8.0",
+    "asyncpg>=0.26.0",
+    "celery>=5.2.0",
+    "flower>=1.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.1.0",
+    "pytest-asyncio>=0.19.0",
+    "pytest-cov>=3.0.0",
+    "pytest-mock>=3.8.0",
+    "pytest-xdist>=2.5.0",
+    "coverage[toml]>=6.4.0",
+    "black>=22.6.0",
+    "isort>=5.10.0",
+    "flake8>=5.0.0",
+    "flake8-bugbear>=22.7.0",
+    "flake8-bandit>=4.1.0",
+    "flake8-docstrings>=1.6.0",
+    "mypy>=0.971",
+    "bandit>=1.7.0",
+    "safety>=2.1.0",
+    "pre-commit>=2.20.0",
+]
+test = [
+    "pytest>=7.1.0",
+    "pytest-asyncio>=0.19.0",
+    "pytest-cov>=3.0.0",
+    "pytest-mock>=3.8.0",
+    "pytest-xdist>=2.5.0",
+    "coverage[toml]>=6.4.0",
+    "httpx>=0.23.0",
+    "testcontainers>=3.4.0",
+]
+docs = [
+    "sphinx>=5.1.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "sphinx-autodoc-typehints>=1.19.0",
+    "myst-parser>=0.18.0",
+]
+deployment = [
+    "docker>=6.0.0",
+    "docker-compose>=1.29.0",
+    "gunicorn>=20.1.0",
+    "nginx>=1.22.0",
+]
+monitoring = [
+    "prometheus-client>=0.14.0",
+    "grafana-api>=1.0.3",
+    "sentry-sdk[fastapi]>=1.9.0",
+]
+ml = [
+    "scikit-learn>=1.1.0",
+    "tensorflow>=2.9.0",
+    "torch>=1.12.0",
+    "transformers>=4.21.0",
+    "optuna>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/hkevin01/brain-forge"
+Documentation = "https://brain-forge.readthedocs.io"
+Repository = "https://github.com/hkevin01/brain-forge.git"
+"Bug Tracker" = "https://github.com/hkevin01/brain-forge/issues"
+Changelog = "https://github.com/hkevin01/brain-forge/blob/main/CHANGELOG.md"
+
+[project.scripts]
+brain-forge = "brain_forge.cli:main"
+bf-server = "brain_forge.server:run_server"
+bf-worker = "brain_forge.worker:run_worker"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["brain_forge*"]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+"brain_forge" = [
+    "configs/*.yaml",
+    "configs/*.yml",
+    "configs/*.json",
+    "templates/*.html",
+    "static/**/*",
+]
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+    | \.mypy_cache
+    | \.pytest_cache
+    | \.venv
+    | venv
+    | build
+    | dist
+    | archive
+)/
+'''
+
+# isort configuration  
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["brain_forge"]
+known_third_party = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "pandas",
+    "redis",
+    "sqlalchemy",
+    "pytest",
+]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+skip_glob = ["archive/*", "build/*", "dist/*", ".venv/*", "venv/*"]
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = ["scipy.*", "matplotlib.*", "redis.*", "psycopg2.*", "celery.*"]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "7.1"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "api: marks tests as API tests",
+    "db: marks tests as database tests",
+    "redis: marks tests as Redis tests",
+    "websocket: marks tests as WebSocket tests",
+]
+filterwarnings = ["error", "ignore::UserWarning", "ignore::DeprecationWarning"]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "*/archive/*",
+    "*/build/*",
+    "*/dist/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# Bandit security configuration
+[tool.bandit]
+exclude_dirs = ["tests", "archive", "build", "dist", ".venv", "venv"]
+skips = [
+    "B101", # assert_used
+    "B601", # paramiko_calls
+]

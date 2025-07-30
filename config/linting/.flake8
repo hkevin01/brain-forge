@@ -1,0 +1,111 @@
+[flake8]
+# Maximum line length (matches black configuration)
+max-line-length = 88
+
+# Ignore common false positives and formatting conflicts
+extend-ignore = 
+    # Whitespace and formatting (handled by black)
+    E203,  # whitespace before ':'
+    E501,  # line too long
+    E226,  # missing whitespace around arithmetic operator
+    W503,  # line break before binary operator
+    W504,  # line break after binary operator
+    
+    # Import related (handled by isort)
+    E402,  # module level import not at top of file
+    
+    # Complexity and docstring (handled by other tools)
+    C901,  # too complex
+    D100,  # missing docstring in public module
+    D101,  # missing docstring in public class
+    D102,  # missing docstring in public method
+    D103,  # missing docstring in public function
+    D104,  # missing docstring in public package
+    D105,  # missing docstring in magic method
+    
+    # Type annotations (handled by mypy)
+    ANN001,  # missing type annotation for function argument
+    ANN002,  # missing type annotation for *args
+    ANN003,  # missing type annotation for **kwargs
+    ANN101,  # missing type annotation for self in method
+    ANN102,  # missing type annotation for cls in classmethod
+    ANN201,  # missing return type annotation for public function
+    ANN202,  # missing return type annotation for private function
+    ANN204,  # missing return type annotation for special method
+    ANN205,  # missing return type annotation for staticmethod
+    ANN206,  # missing return type annotation for classmethod
+
+# Exclude directories and files
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    env,
+    .env,
+    build,
+    dist,
+    *.egg-info,
+    .mypy_cache,
+    .pytest_cache,
+    .coverage,
+    htmlcov,
+    docs/_build,
+    archive,
+    node_modules,
+    migrations,
+    .copilot,
+    .vscode,
+    .global
+
+# File patterns to check
+filename = *.py
+
+# Enable specific plugins
+select = 
+    E,    # pycodestyle errors
+    W,    # pycodestyle warnings
+    F,    # pyflakes
+    C,    # mccabe complexity
+    N,    # pep8-naming
+    B,    # flake8-bugbear
+    S,    # flake8-bandit (security)
+
+# Per-file ignores
+per-file-ignores =
+    # Tests can have longer lines and unused imports
+    tests/*:E501,F401,F811,S101
+    test_*.py:E501,F401,F811,S101
+    *test*.py:E501,F401,F811,S101
+    
+    # Configuration files
+    config/*:E501
+    configs/*:E501
+    
+    # Scripts can be less strict
+    scripts/*:E501,F401
+    tools/*:E501,F401
+    
+    # Examples can have unused imports for demonstration
+    examples/*:E501,F401,F841
+    
+    # Allow star imports in __init__.py files
+    __init__.py:F401,F403
+    
+    # Migration files (if any)
+    migrations/*:E501,F401
+
+# Maximum complexity for mccabe
+max-complexity = 12
+
+# Show source code for each error
+show-source = True
+
+# Show statistics at the end
+statistics = True
+
+# Count errors and warnings
+count = True
+
+# Use colors in output (if terminal supports it)
+format = %(path)s:%(row)d:%(col)d: %(code)s %(text)s
