@@ -1,2 +1,4 @@
 # Task
-improve docs folder and files within, examine each one and mrege like files clean it up , there are too many similar files in there, design.md is good and complete example,
+okay start creating theokay start creating the pyqt6 gui environemnt for this project to showcase all parts
+okay start creating the pyqt6 gui environemnt for this project to showcase all parts
+okay start creating the pyqt6 gui environemnt for this project to showcase all parts
