@@ -45,18 +45,27 @@ A comprehensive demonstration GUI for the Brain-Forge brain scanning and simulat
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
 
-## 📦 Installation
+## 📦 Installation & Quick Start
 
 ```bash
-# Install dependencies
-npm install
+# Option 1: Full setup and run (from Brain-Forge root directory)
+bash run.sh
 
-# Start development server
+# Option 2: Manual setup
+cd demo-gui
+npm install
 npm run dev
 
-# Build for production
-npm run build
+# Option 3: Quick run (after dependencies installed)
+bash run.sh
+
+# Option 4: Individual commands
+npm install     # Install dependencies
+npm run dev     # Start development server
+npm run build   # Build for production
 ```
+
+**🌐 Access the application at: http://localhost:3000**
 
 ## 🎯 Usage
 
@@ -101,7 +110,7 @@ The application includes comprehensive simulation of:
 
 ### Colors
 - **Neural Blue**: `#00d4ff` - Primary data streams
-- **Neural Green**: `#00ff88` - Healthy status indicators  
+- **Neural Green**: `#00ff88` - Healthy status indicators
 - **Neural Purple**: `#b347ff` - Secondary data types
 - **Neural Orange**: `#ff6b35` - Warnings and alerts
 - **Neural Red**: `#ff3366` - Errors and critical alerts
@@ -114,7 +123,7 @@ The application includes comprehensive simulation of:
 
 ### Brain Regions
 - Frontal, Parietal, Temporal, Occipital Cortex
-- Motor, Sensory, Auditory, Visual Cortex  
+- Motor, Sensory, Auditory, Visual Cortex
 - Hippocampus, Amygdala, Thalamus, Cerebellum
 
 ### Signal Processing

@@ -447,6 +447,245 @@ class BrainForgeDashboard:
                 st.success(f"✅ {device}: Connected")
             else:
                 st.error(f"❌ {device}: Disconnected")
+        
+        # Add device details
+        if self.hardware_status.get('omp_helmet'):
+            st.caption("OMP: 306 channels @ 1000Hz")
+        if self.hardware_status.get('kernel_optical'):
+            st.caption("Kernel: 96 channels @ 100Hz")
+        if self.hardware_status.get('accelerometer'):
+            st.caption("Accel: 3-axis @ 1000Hz")
+    
+    def _display_processing_controls(self):
+        """Display processing parameter controls"""
+        st.subheader("Filter Settings")
+        low_freq = st.slider("Low-pass Filter (Hz)", 1.0, 50.0, 1.0)
+        high_freq = st.slider("High-pass Filter (Hz)", 50.0, 200.0, 100.0)
+        
+        st.subheader("Compression")
+        compression_ratio = st.slider("Compression Ratio", 1.0, 10.0, 5.0)
+        enable_compression = st.checkbox("Enable Compression", True)
+        
+        st.subheader("Artifact Removal")
+        enable_ica = st.checkbox("ICA Artifact Removal", True)
+        motion_threshold = st.slider("Motion Threshold", 0.1, 2.0, 0.5)
+        
+        # Store settings for processing pipeline
+        self.processing_settings = {
+            'low_freq': low_freq,
+            'high_freq': high_freq,
+            'compression_ratio': compression_ratio,
+            'enable_compression': enable_compression,
+            'enable_ica': enable_ica,
+            'motion_threshold': motion_threshold
+        }
+    
+    def _display_main_visualizations(self):
+        """Display main brain visualization panels"""
+        st.subheader("🧠 Brain Activity Visualization")
+        
+        # Create tabs for different visualizations
+        tab1, tab2, tab3 = st.tabs([
+            "3D Brain Model", "Connectivity Matrix", "Signal Analysis"
+        ])
+        
+        with tab1:
+            self._display_3d_brain_model()
+        
+        with tab2:
+            self._display_connectivity_matrix()
+        
+        with tab3:
+            self._display_signal_analysis()
+    
+    def _display_3d_brain_model(self):
+        """Display 3D brain model visualization"""
+        st.info("📊 3D Brain Model")
+        st.markdown("**Real-time neural activity overlay**")
+        
+        # Simulate brain region activity data
+        brain_regions = [
+            'Frontal Cortex', 'Parietal Cortex', 'Temporal Cortex',
+            'Occipital Cortex', 'Motor Cortex', 'Sensory Cortex',
+            'Hippocampus', 'Amygdala'
+        ]
+        
+        # Create activity data
+        activity_data = np.random.rand(len(brain_regions)) * 100
+        
+        # Display as bar chart for now (can be replaced with PyVista export)
+        chart_data = pd.DataFrame({
+            'Region': brain_regions,
+            'Activity (%)': activity_data
+        })
+        
+        st.bar_chart(chart_data.set_index('Region'))
+        
+        # Add brain state indicators
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            alpha_val = f"{np.random.rand()*100:.1f}%"
+            alpha_delta = f"{np.random.rand()*10-5:.1f}"
+            st.metric("Alpha Power", alpha_val, alpha_delta)
+        with col2:
+            beta_val = f"{np.random.rand()*100:.1f}%"
+            beta_delta = f"{np.random.rand()*10-5:.1f}"
+            st.metric("Beta Power", beta_val, beta_delta)
+        with col3:
+            gamma_val = f"{np.random.rand()*100:.1f}%"
+            gamma_delta = f"{np.random.rand()*10-5:.1f}"
+            st.metric("Gamma Power", gamma_val, gamma_delta)
+    
+    def _display_connectivity_matrix(self):
+        """Display brain connectivity matrix"""
+        st.info("🌐 Brain Connectivity Network")
+        
+        # Generate connectivity matrix
+        n_regions = 8
+        connectivity_matrix = np.random.rand(n_regions, n_regions)
+        # Make symmetric
+        connectivity_matrix = (connectivity_matrix + connectivity_matrix.T) / 2
+        np.fill_diagonal(connectivity_matrix, 1.0)
+        
+        # Create heatmap
+        fig, ax = plt.subplots(figsize=(8, 6))
+        sns.heatmap(connectivity_matrix,
+                    annot=True,
+                    fmt='.2f',
+                    cmap='viridis',
+                    ax=ax)
+        ax.set_title('Brain Region Connectivity Matrix')
+        st.pyplot(fig)
+        plt.close()
+        
+        # Network metrics
+        st.subheader("Network Metrics")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Global Efficiency", f"{np.random.rand():.3f}")
+            st.metric("Clustering Coefficient", f"{np.random.rand():.3f}")
+        with col2:
+            st.metric("Small-World Index", f"{np.random.rand()*2:.3f}")
+            st.metric("Network Density", f"{np.random.rand():.3f}")
+    
+    def _display_signal_analysis(self):
+        """Display signal processing analysis"""
+        st.info("📈 Real-time Signal Analysis")
+        
+        # Generate frequency spectrum data
+        freqs = np.linspace(1, 100, 100)
+        power_spectrum = np.exp(-freqs/20) + np.random.rand(100) * 0.1
+        
+        # Create frequency plot
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.plot(freqs, power_spectrum, 'b-', linewidth=2)
+        ax.set_xlabel('Frequency (Hz)')
+        ax.set_ylabel('Power Spectral Density')
+        ax.set_title('Real-time Frequency Spectrum')
+        ax.grid(True, alpha=0.3)
+        
+        # Add frequency band markers
+        bands = {'Delta': (1, 4), 'Theta': (4, 8), 'Alpha': (8, 13),
+                 'Beta': (13, 30), 'Gamma': (30, 100)}
+        colors = ['red', 'orange', 'green', 'blue', 'purple']
+        
+        for (band, (low, high)), color in zip(bands.items(), colors):
+            ax.axvspan(low, high, alpha=0.2, color=color, label=band)
+        
+        ax.legend()
+        st.pyplot(fig)
+        plt.close()
+        
+        # Signal quality metrics
+        st.subheader("Signal Quality")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            snr = 20 + np.random.rand() * 10
+            snr_delta = f"{np.random.rand()*2-1:.1f}"
+            st.metric("Signal-to-Noise Ratio", f"{snr:.1f} dB", snr_delta)
+        with col2:
+            artifacts = np.random.randint(0, 5)
+            st.metric("Artifacts Detected", artifacts)
+        with col3:
+            quality = np.random.rand() * 100
+            st.metric("Overall Quality", f"{quality:.1f}%")
+    
+    def _display_system_metrics(self):
+        """Display system performance metrics"""
+        st.subheader("📊 System Performance")
+        
+        # Processing metrics
+        st.metric("Processing Latency", "67 ms", "-12 ms")
+        st.metric("Data Throughput", "15.2 MB/s", "+0.8 MB/s")
+        st.metric("Compression Ratio", "5.2x", "+0.3x")
+        
+        # Resource utilization
+        st.subheader("💻 Resource Usage")
+        cpu_usage = np.random.rand() * 100
+        memory_usage = np.random.rand() * 100
+        gpu_usage = np.random.rand() * 100
+        
+        st.progress(cpu_usage/100, text=f"CPU: {cpu_usage:.1f}%")
+        st.progress(memory_usage/100, text=f"Memory: {memory_usage:.1f}%")
+        st.progress(gpu_usage/100, text=f"GPU: {gpu_usage:.1f}%")
+        
+        # Temperature monitoring
+        st.subheader("🌡️ Temperature")
+        cpu_temp = 45 + np.random.rand() * 20
+        gpu_temp = 55 + np.random.rand() * 25
+        
+        st.metric("CPU Temperature", f"{cpu_temp:.1f}°C")
+        st.metric("GPU Temperature", f"{gpu_temp:.1f}°C")
+    
+    def _display_realtime_data(self):
+        """Display real-time data streams"""
+        st.subheader("📡 Real-time Data Streams")
+        
+        # Create columns for different data streams
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.info("🔵 OMP Helmet Data")
+            # Generate sample magnetometer data
+            time_points = np.linspace(0, 10, 1000)
+            mag_data = np.sin(2 * np.pi * 10 * time_points) + np.random.rand(1000) * 0.1
+            
+            fig, ax = plt.subplots(figsize=(8, 3))
+            ax.plot(time_points[-100:], mag_data[-100:], 'b-', linewidth=1)
+            ax.set_xlabel('Time (s)')
+            ax.set_ylabel('Magnetic Field (pT)')
+            ax.set_title('Channel 1 - Magnetometer')
+            ax.grid(True, alpha=0.3)
+            st.pyplot(fig)
+            plt.close()
+        
+        with col2:
+            st.info("🟢 Kernel Optical Data")
+            # Generate sample NIRS data
+            nirs_data = np.exp(-time_points/5) + np.random.rand(1000) * 0.05
+            
+            fig, ax = plt.subplots(figsize=(8, 3))
+            ax.plot(time_points[-100:], nirs_data[-100:], 'g-', linewidth=1)
+            ax.set_xlabel('Time (s)')
+            ax.set_ylabel('Hemoglobin Concentration')
+            ax.set_title('Flow Channel 1')
+            ax.grid(True, alpha=0.3)
+            st.pyplot(fig)
+            plt.close()
+        
+        with col3:
+            st.info("🟡 Accelerometer Data")
+            # Generate sample motion data
+            accel_data = np.sin(2 * np.pi * 2 * time_points) + np.random.rand(1000) * 0.2
+            
+            fig, ax = plt.subplots(figsize=(8, 3))
+            ax.plot(time_points[-100:], accel_data[-100:], 'orange', linewidth=1)
+            ax.set_xlabel('Time (s)')
+            ax.set_ylabel('Acceleration (g)')
+            ax.set_title('X-axis Motion')
+            ax.grid(True, alpha=0.3)
+            st.pyplot(fig)
+            plt.close()
     
     def _display_processing_controls(self):
         """Display processing parameter controls"""

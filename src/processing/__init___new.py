@@ -12,16 +12,38 @@ The processing pipeline is organized into modular components:
 - realtime: Real-time processing orchestration
 """
 
-from .artifacts import (HybridArtifactRemover, ICArtifactRemover,
-                        StatisticalArtifactRemover, create_artifact_remover)
-from .compression import (CompressionManager, WaveletCompressor,
-                          create_compressor)
-from .features import (ComprehensiveFeatureExtractor, SpectralFeatureExtractor,
-                       TemporalFeatureExtractor, create_feature_extractor)
 # Import core processing classes and functions
-from .filters import (FilterBank, ProcessingParameters, RealTimeFilter,
-                      create_standard_filter_bank)
-from .realtime import RealTimeProcessor, test_processor
+from .filters import (
+    RealTimeFilter,
+    FilterBank,
+    create_standard_filter_bank,
+    ProcessingParameters
+)
+
+from .compression import (
+    WaveletCompressor,
+    CompressionManager,
+    create_compressor
+)
+
+from .artifacts import (
+    ICArtifactRemover,
+    StatisticalArtifactRemover,
+    HybridArtifactRemover,
+    create_artifact_remover
+)
+
+from .features import (
+    SpectralFeatureExtractor,
+    TemporalFeatureExtractor,
+    ComprehensiveFeatureExtractor,
+    create_feature_extractor
+)
+
+from .realtime import (
+    RealTimeProcessor,
+    test_processor
+)
 
 __all__ = [
     # Core parameters
