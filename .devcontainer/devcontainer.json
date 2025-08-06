@@ -1,0 +1,275 @@
+{
+  "name": "Brain-Forge Multi-Modal BCI Development",
+  "description": "Complete development environment for Brain-Forge BCI system with all hardware drivers and tools",
+  
+  "dockerComposeFile": [
+    "../docker-compose.dev.yml",
+    "docker-compose.yml"
+  ],
+  
+  "service": "brain-forge-dev",
+  "workspaceFolder": "/workspace",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "configureZshAsDefaultShell": true,
+      "username": "dev",
+      "uid": "1000",
+      "gid": "1000"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": false
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true",
+      "moby": "true"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11",
+      "installTools": true,
+      "optimize": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18",
+      "nodeGypDependencies": true
+    }
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Python development
+        "ms-python.python",
+        "ms-python.flake8",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.pylint",
+        "ms-python.mypy-type-checker",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.jupyter-renderers",
+        
+        // JavaScript/TypeScript development
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-json",
+        
+        // React and frontend
+        "ms-vscode.vscode-react-native",
+        "formulahendry.auto-rename-tag",
+        "bradlc.vscode-tailwindcss",
+        
+        // Docker and containers
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers",
+        
+        // Git and version control
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        "github.copilot",
+        "github.copilot-chat",
+        
+        // Database tools
+        "ms-mssql.mssql",
+        "cweijan.vscode-mysql-client2",
+        "chris-lewis.mongodb-snippets",
+        
+        // API development
+        "humao.rest-client",
+        "42crunch.vscode-openapi",
+        "arjun.swagger-viewer",
+        
+        // Code quality and security
+        "sonarsource.sonarlint-vscode",
+        "ms-vscode.vscode-security",
+        "redhat.vscode-yaml",
+        
+        // Scientific computing and data visualization
+        "ms-toolsai.datawrangler",
+        "RandomFractalsInc.vscode-data-preview",
+        "mechatroner.rainbow-csv",
+        
+        // Documentation and markdown
+        "yzhang.markdown-all-in-one",
+        "davidanson.vscode-markdownlint",
+        "bierner.markdown-mermaid",
+        
+        // Productivity and utilities
+        "ms-vscode.live-server",
+        "ritwickdey.liveserver",
+        "streetsidesoftware.code-spell-checker",
+        "gruntfuggly.todo-tree",
+        "ms-vscode.hexeditor",
+        
+        // Themes and UI
+        "pkief.material-icon-theme",
+        "github.github-vscode-theme",
+        
+        // Brain-Forge specific
+        "ms-python.debugpy",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake"
+      ],
+      
+      "settings": {
+        // Python settings
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": ["--line-length=88"],
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.linting.mypyEnabled": true,
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "python.testing.nosetestsEnabled": false,
+        
+        // JavaScript/TypeScript settings
+        "typescript.preferences.quoteStyle": "double",
+        "javascript.preferences.quoteStyle": "double",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true,
+          "source.organizeImports": true
+        },
+        
+        // Editor settings
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": true,
+        "editor.wordWrap": "on",
+        "editor.rulers": [88, 120],
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        
+        // Terminal settings
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.fontSize": 14,
+        
+        // Git settings
+        "git.enableSmartCommit": true,
+        "git.confirmSync": false,
+        "git.autofetch": true,
+        
+        // Brain-Forge specific settings
+        "python.analysis.extraPaths": [
+          "/workspace/src",
+          "/workspace/src/hardware",
+          "/workspace/src/hardware/device_drivers",
+          "/workspace/src/hardware/synchronization"
+        ],
+        
+        // File associations for neural data formats
+        "files.associations": {
+          "*.edf": "plaintext",
+          "*.fif": "plaintext",
+          "*.set": "plaintext",
+          "*.mat": "plaintext",
+          "*.h5": "plaintext",
+          "*.hdf5": "plaintext"
+        },
+        
+        // Exclude patterns for performance
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/.pytest_cache": true,
+          "**/node_modules": true,
+          "**/.git": false,
+          "**/data": true,
+          "**/datasets": true,
+          "**/logs": true
+        },
+        
+        // Search exclude patterns
+        "search.exclude": {
+          "**/node_modules": true,
+          "**/bower_components": true,
+          "**/*.code-search": true,
+          "**/data": true,
+          "**/datasets": true,
+          "**/logs": true,
+          "**/__pycache__": true
+        }
+      }
+    }
+  },
+  
+  "forwardPorts": [
+    3000,  // Frontend dev server
+    5000,  // Backend API
+    8000,  // Python web servers
+    8080,  // Alternative web server
+    8888,  // Jupyter Lab
+    5432,  // PostgreSQL
+    6379,  // Redis
+    27017, // MongoDB
+    9200,  // Elasticsearch
+    9000,  // MinIO
+    5672,  // RabbitMQ
+    15672, // RabbitMQ Management
+    3000,  // Grafana
+    9090,  // Prometheus
+    5601,  // Kibana
+    16686, // Jaeger
+    8025   // Mailhog
+  ],
+  
+  "portsAttributes": {
+    "3000": {
+      "label": "Frontend Dev Server",
+      "onAutoForward": "notify"
+    },
+    "5000": {
+      "label": "Backend API",
+      "onAutoForward": "notify"
+    },
+    "8888": {
+      "label": "Jupyter Lab",
+      "onAutoForward": "openPreview"
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent"
+    },
+    "9000": {
+      "label": "MinIO Console",
+      "onAutoForward": "ignore"
+    }
+  },
+  
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.ssh,target=/home/dev/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/dev/.gitconfig,type=bind,consistency=cached"
+  ],
+  
+  "remoteEnv": {
+    "PYTHONPATH": "/workspace:/workspace/src",
+    "NODE_ENV": "development",
+    "BRAIN_FORGE_ENV": "development",
+    "POSTGRES_HOST": "postgres",
+    "REDIS_HOST": "redis",
+    "MONGODB_HOST": "mongodb",
+    "ELASTICSEARCH_HOST": "elasticsearch",
+    "RABBITMQ_HOST": "rabbitmq"
+  },
+  
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "echo 'Brain-Forge development environment ready!'",
+  
+  "remoteUser": "dev",
+  
+  "shutdownAction": "stopCompose"
+}

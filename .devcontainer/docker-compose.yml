@@ -1,0 +1,40 @@
+# Brain-Forge Dev Container Compose Configuration
+# Extends the main docker-compose.dev.yml with development-specific services
+
+version: '3.8'
+
+services:
+  # Main development container
+  brain-forge-dev:
+    build:
+      context: ..
+      dockerfile: docker/dev-backend.Dockerfile
+    container_name: brain-forge-dev-container
+    volumes:
+      - ../:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+      - brain-forge-vscode-extensions:/home/dev/.vscode-server/extensions
+      - brain-forge-vscode-insiders:/home/dev/.vscode-server-insiders/extensions
+      - brain-forge-bash-history:/home/dev/.bash_history
+      - brain-forge-jupyter:/home/dev/.jupyter
+    environment:
+      - PYTHONPATH=/workspace:/workspace/src
+      - NODE_ENV=development
+      - BRAIN_FORGE_ENV=development
+    networks:
+      - brain-forge-network
+    depends_on:
+      - postgres
+      - redis
+      - mongodb
+      - rabbitmq
+    command: sleep infinity
+    user: dev
+    stdin_open: true
+    tty: true
+
+volumes:
+  brain-forge-vscode-extensions:
+  brain-forge-vscode-insiders:
+  brain-forge-bash-history:
+  brain-forge-jupyter:

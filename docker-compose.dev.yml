@@ -1,0 +1,286 @@
+# Brain-Forge Development Infrastructure
+# Multi-database and supporting services for BCI development
+# Includes PostgreSQL, Redis, MongoDB, and monitoring tools
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database for structured data
+  postgres:
+    image: postgres:15-alpine
+    container_name: brain-forge-postgres
+    environment:
+      POSTGRES_DB: brain_forge_dev
+      POSTGRES_USER: brain_forge
+      POSTGRES_PASSWORD: dev_password_2024
+      POSTGRES_MULTIPLE_DATABASES: "experiments,subjects,sessions,neural_data"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+      - ./postgres-conf:/etc/postgresql/conf.d
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brain_forge -d brain_forge_dev"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # PostgreSQL Admin Interface
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: brain-forge-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@brain-forge.local
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - brain-forge-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  # Redis for caching and real-time data
+  redis:
+    image: redis:7-alpine
+    container_name: brain-forge-redis
+    command: redis-server --appendonly yes --requirepass redis_dev_2024
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis-conf/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # MongoDB for document storage (neural patterns, configs)
+  mongodb:
+    image: mongo:6.0
+    container_name: brain-forge-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: brain_forge
+      MONGO_INITDB_ROOT_PASSWORD: mongo_dev_2024
+      MONGO_INITDB_DATABASE: brain_forge_dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-scripts/mongodb:/docker-entrypoint-initdb.d
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/brain_forge_dev --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # Elasticsearch for neural data search and analytics
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: brain-forge-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # Kibana for Elasticsearch visualization
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: brain-forge-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - brain-forge-network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  # MinIO for S3-compatible object storage (large neural datasets)
+  minio:
+    image: minio/minio:latest
+    container_name: brain-forge-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: brain_forge_admin
+      MINIO_ROOT_PASSWORD: minio_dev_2024
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # RabbitMQ for message queuing (real-time BCI data streams)
+  rabbitmq:
+    image: rabbitmq:3.11-management-alpine
+    container_name: brain-forge-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: brain_forge
+      RABBITMQ_DEFAULT_PASS: rabbitmq_dev_2024
+    ports:
+      - "5672:5672"   # AMQP port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq-conf:/etc/rabbitmq/conf.d
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # NGINX as reverse proxy and load balancer
+  nginx:
+    image: nginx:alpine
+    container_name: brain-forge-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx-conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx-conf/conf.d:/etc/nginx/conf.d
+      - ./ssl-certs:/etc/nginx/ssl
+      - nginx_logs:/var/log/nginx
+    networks:
+      - brain-forge-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: brain-forge-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - brain-forge-network
+    restart: unless-stopped
+
+  # Grafana for metrics visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: brain-forge-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: grafana_dev_2024
+      GF_USERS_ALLOW_SIGN_UP: false
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - brain-forge-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # Jaeger for distributed tracing
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: brain-forge-jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    ports:
+      - "16686:16686"  # Jaeger UI
+      - "14268:14268"  # Jaeger collector HTTP
+      - "14250:14250"  # Jaeger collector gRPC
+    networks:
+      - brain-forge-network
+    restart: unless-stopped
+
+  # Mailhog for email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: brain-forge-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - brain-forge-network
+    restart: unless-stopped
+
+# Persistent volumes
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  redis_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  minio_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  nginx_logs:
+    driver: local
+
+# Networks
+networks:
+  brain-forge-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
