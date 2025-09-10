@@ -25,5 +25,7 @@
   "workbench.editor.enablePreview": false,
   "chat.tools.autoApprove": true,
   "chat.agent.maxRequests": 100,
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "github.copilot.chat.alternateGptPrompt.enabled": true,
+  "chat.todoListTool.enabled": true
 }

@@ -230,8 +230,8 @@ CMD ["/bin/bash"]
 
 # Labels for maintenance
 LABEL maintainer="Brain-Forge Team" \
-      version="1.0" \
-      description="Multi-purpose backend development container for BCI systems" \
-      python.version="3.11" \
-      node.version="LTS" \
-      purpose="development"
+    version="1.0" \
+    description="Multi-purpose backend development container for BCI systems" \
+    python.version="3.11" \
+    node.version="LTS" \
+    purpose="development"

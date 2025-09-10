@@ -170,7 +170,7 @@ CMD ["/bin/bash"]
 
 # Labels
 LABEL maintainer="Brain-Forge Team" \
-      version="1.0" \
-      description="Frontend development container for BCI web interfaces" \
-      node.version="18" \
-      purpose="frontend-development"
+    version="1.0" \
+    description="Frontend development container for BCI web interfaces" \
+    node.version="18" \
+    purpose="frontend-development"

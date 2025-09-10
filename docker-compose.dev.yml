@@ -2,7 +2,7 @@
 # Multi-database and supporting services for BCI development
 # Includes PostgreSQL, Redis, MongoDB, and monitoring tools
 
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database for structured data
@@ -36,7 +36,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@brain-forge.local
       PGADMIN_DEFAULT_PASSWORD: admin123
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_SERVER_MODE: "False"
     ports:
       - "5050:80"
     volumes:
@@ -154,7 +154,7 @@ services:
       RABBITMQ_DEFAULT_USER: brain_forge
       RABBITMQ_DEFAULT_PASS: rabbitmq_dev_2024
     ports:
-      - "5672:5672"   # AMQP port
+      - "5672:5672" # AMQP port
       - "15672:15672" # Management UI
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
@@ -183,7 +183,15 @@ services:
     networks:
       - brain-forge-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost/health",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -194,12 +202,12 @@ services:
     image: prom/prometheus:latest
     container_name: brain-forge-prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
     ports:
       - "9090:9090"
     volumes:
@@ -236,9 +244,9 @@ services:
     environment:
       COLLECTOR_OTLP_ENABLED: true
     ports:
-      - "16686:16686"  # Jaeger UI
-      - "14268:14268"  # Jaeger collector HTTP
-      - "14250:14250"  # Jaeger collector gRPC
+      - "16686:16686" # Jaeger UI
+      - "14268:14268" # Jaeger collector HTTP
+      - "14250:14250" # Jaeger collector gRPC
     networks:
       - brain-forge-network
     restart: unless-stopped
@@ -248,8 +256,8 @@ services:
     image: mailhog/mailhog:latest
     container_name: brain-forge-mailhog
     ports:
-      - "1025:1025"  # SMTP
-      - "8025:8025"  # Web UI
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
     networks:
       - brain-forge-network
     restart: unless-stopped
