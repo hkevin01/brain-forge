@@ -48,12 +48,12 @@ The original Brain-Forge project attempted to integrate three sensor modalities 
 ### Realistic Performance Targets
 Unlike the original overly optimistic targets, this demo uses achievable metrics:
 
-| Metric | Original Target | Realistic Target | Demo Achievement |
+| <sub>Metric</sub> | <sub>Original Target</sub> | <sub>Realistic Target</sub> | <sub>Demo Achievement</sub> |
 |--------|----------------|------------------|------------------|
-| Latency | <100ms | <500ms | ~287ms |
-| Accuracy | >95% | >75% | ~82% |
-| Throughput | 10x compression | 1.5-3x compression | ~2.1x |
-| Reliability | 99.9% uptime | 95% uptime | 97.3% |
+| <sub>Latency</sub> | <sub><100ms</sub> | <sub><500ms</sub> | <sub>~287ms</sub> |
+| <sub>Accuracy</sub> | <sub>>95%</sub> | <sub>>75%</sub> | <sub>~82%</sub> |
+| <sub>Throughput</sub> | <sub>10x compression</sub> | <sub>1.5-3x compression</sub> | <sub>~2.1x</sub> |
+| <sub>Reliability</sub> | <sub>99.9% uptime</sub> | <sub>95% uptime</sub> | <sub>97.3%</sub> |
 
 ## Running the Demo
 
