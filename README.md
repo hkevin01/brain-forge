@@ -249,13 +249,13 @@ python -m pytest tests/
 
 ### Hardware Requirements
 
-| Component | Minimum | Recommended | Multi-Modal Setup |
+| <sub>Component</sub> | <sub>Minimum</sub> | <sub>Recommended</sub> | <sub>Multi-Modal Setup</sub> |
 |-----------|---------|-------------|-------------------|
-| **RAM** | 16 GB | 64+ GB | 128 GB (simultaneous streams) |
-| **CPU** | 8 cores | 16+ cores | 32 cores (real-time processing) |
-| **GPU** | GTX 1080 | RTX 4090 | Multi-GPU cluster (CUDA) |
-| **Storage** | 100 GB | 1+ TB NVMe | 10+ TB high-speed array |
-| **Network** | 1 Gbps | 10+ Gbps | Dedicated acquisition network |
+| <sub>**RAM**</sub> | <sub>16 GB</sub> | <sub>64+ GB</sub> | <sub>128 GB (simultaneous streams)</sub> |
+| <sub>**CPU**</sub> | <sub>8 cores</sub> | <sub>16+ cores</sub> | <sub>32 cores (real-time processing)</sub> |
+| <sub>**GPU**</sub> | <sub>GTX 1080</sub> | <sub>RTX 4090</sub> | <sub>Multi-GPU cluster (CUDA)</sub> |
+| <sub>**Storage**</sub> | <sub>100 GB</sub> | <sub>1+ TB NVMe</sub> | <sub>10+ TB high-speed array</sub> |
+| <sub>**Network**</sub> | <sub>1 Gbps</sub> | <sub>10+ Gbps</sub> | <sub>Dedicated acquisition network</sub> |
 
 #### 🧲 **Specialized Hardware Integration**
 - **NIBIB OPM Helmet**: Magnetically shielded room (9ft × 9ft minimum)
@@ -483,11 +483,11 @@ digital_brain.synchronize_with_biological(fused_data)
 
 ### 🔄 **Cross-Layer Integration**
 
-| Layer | Input | Processing | Output |
+| <sub>Layer</sub> | <sub>Input</sub> | <sub>Processing</sub> | <sub>Output</sub> |
 |-------|-------|------------|--------|
-| **Acquisition** | Raw sensor signals | Hardware fusion & compression | Synchronized multi-modal data |
-| **Processing** | Fused data streams | Pattern recognition & mapping | Neural connectivity maps |
-| **Simulation** | Brain patterns | Digital twin calibration | Real-time brain state models |
+| <sub>**Acquisition**</sub> | <sub>Raw sensor signals</sub> | <sub>Hardware fusion & compression</sub> | <sub>Synchronized multi-modal data</sub> |
+| <sub>**Processing**</sub> | <sub>Fused data streams</sub> | <sub>Pattern recognition & mapping</sub> | <sub>Neural connectivity maps</sub> |
+| <sub>**Simulation**</sub> | <sub>Brain patterns</sub> | <sub>Digital twin calibration</sub> | <sub>Real-time brain state models</sub> |
 
 ## 🏗️ Architecture
 
@@ -506,32 +506,32 @@ brain_forge/
 
 ### Core Components
 
-| Module | Status | Description |
+| <sub>Module</sub> | <sub>Status</sub> | <sub>Description</sub> |
 |--------|---------|-------------|
-| **Core** | ✅ Complete | Configuration management, logging, error handling |
-| **OMP Hardware** | 🔄 Development | NIBIB optically pumped magnetometer integration with matrix coil compensation |
-| **Kernel Hardware** | 🔄 Development | Flow2 TD-fNIRS + EEG helmet with dual-wavelength optical sensors |
-| **Accelo Hardware** | 🔄 Development | Brown University accelerometer arrays for impact and motion detection |
-| **Multi-Modal Fusion** | 🔄 Development | Synchronized data streams with microsecond precision timing |
-| **Neural Compression** | 🔄 Development | Transformer-based neural pattern compression (2-10x ratios) |
-| **Brain Mapping** | 🔄 Development | Interactive 3D brain atlas with connectivity visualization |
-| **Digital Twin** | 📋 Planned | Individual brain simulation using Brian2/NEST frameworks |
-| **Transfer Learning** | 📋 Planned | Brain-to-AI pattern encoding and cross-subject adaptation |
-| **API Layer** | 🔄 Development | REST/WebSocket interfaces for real-time data streaming |
+| <sub>**Core**</sub> | <sub>✅ Complete</sub> | <sub>Configuration management, logging, error handling</sub> |
+| <sub>**OMP Hardware**</sub> | <sub>🔄 Development</sub> | <sub>NIBIB optically pumped magnetometer integration with matrix coil compensation</sub> |
+| <sub>**Kernel Hardware**</sub> | <sub>🔄 Development</sub> | <sub>Flow2 TD-fNIRS + EEG helmet with dual-wavelength optical sensors</sub> |
+| <sub>**Accelo Hardware**</sub> | <sub>🔄 Development</sub> | <sub>Brown University accelerometer arrays for impact and motion detection</sub> |
+| <sub>**Multi-Modal Fusion**</sub> | <sub>🔄 Development</sub> | <sub>Synchronized data streams with microsecond precision timing</sub> |
+| <sub>**Neural Compression**</sub> | <sub>🔄 Development</sub> | <sub>Transformer-based neural pattern compression (2-10x ratios)</sub> |
+| <sub>**Brain Mapping**</sub> | <sub>🔄 Development</sub> | <sub>Interactive 3D brain atlas with connectivity visualization</sub> |
+| <sub>**Digital Twin**</sub> | <sub>📋 Planned</sub> | <sub>Individual brain simulation using Brian2/NEST frameworks</sub> |
+| <sub>**Transfer Learning**</sub> | <sub>📋 Planned</sub> | <sub>Brain-to-AI pattern encoding and cross-subject adaptation</sub> |
+| <sub>**API Layer**</sub> | <sub>🔄 Development</sub> | <sub>REST/WebSocket interfaces for real-time data streaming</sub> |
 
 ## 📊 Performance Benchmarks
 
-| Metric | Target | Current Status | Multi-Modal Specification |
+| <sub>Metric</sub> | <sub>Target</sub> | <sub>Current Status</sub> | <sub>Multi-Modal Specification</sub> |
 |--------|--------|----------------|---------------------------|
-| **Processing Latency** | <100ms | 🔄 In Development | Sub-millisecond OMP/Kernel/Accelo sync |
-| **Data Compression** | 2-10x | 🔄 In Development | Neural transformer compression |
-| **MEG Channels** | 306+ | ✅ Supported | NIBIB OPM helmet array |
-| **Optical Modules** | 40+ | ✅ Supported | Kernel Flow2 TD-fNIRS sensors |
-| **EEG Channels** | 4+ | ✅ Supported | Kernel integrated electrodes |
-| **Accelerometers** | 64+ | ✅ Supported | Brown Accelo-hat arrays |
-| **Sampling Rate** | 1000 Hz | ✅ Supported | Synchronized across all modalities |
-| **Movement Range** | 9ft × 9ft | ✅ Supported | Magnetically shielded room |
-| **Data Throughput** | 10+ GB/hour | 🔄 In Development | Multi-modal compressed streams |
+| <sub>**Processing Latency**</sub> | <sub><100ms</sub> | <sub>🔄 In Development</sub> | <sub>Sub-millisecond OMP/Kernel/Accelo sync</sub> |
+| <sub>**Data Compression**</sub> | <sub>2-10x</sub> | <sub>🔄 In Development</sub> | <sub>Neural transformer compression</sub> |
+| <sub>**MEG Channels**</sub> | <sub>306+</sub> | <sub>✅ Supported</sub> | <sub>NIBIB OPM helmet array</sub> |
+| <sub>**Optical Modules**</sub> | <sub>40+</sub> | <sub>✅ Supported</sub> | <sub>Kernel Flow2 TD-fNIRS sensors</sub> |
+| <sub>**EEG Channels**</sub> | <sub>4+</sub> | <sub>✅ Supported</sub> | <sub>Kernel integrated electrodes</sub> |
+| <sub>**Accelerometers**</sub> | <sub>64+</sub> | <sub>✅ Supported</sub> | <sub>Brown Accelo-hat arrays</sub> |
+| <sub>**Sampling Rate**</sub> | <sub>1000 Hz</sub> | <sub>✅ Supported</sub> | <sub>Synchronized across all modalities</sub> |
+| <sub>**Movement Range**</sub> | <sub>9ft × 9ft</sub> | <sub>✅ Supported</sub> | <sub>Magnetically shielded room</sub> |
+| <sub>**Data Throughput**</sub> | <sub>10+ GB/hour</sub> | <sub>🔄 In Development</sub> | <sub>Multi-modal compressed streams</sub> |
 
 ### 🚀 **Technical Achievements**
 - **Matrix Coil Compensation**: 48 individually controlled coils for motion artifact removal
@@ -848,5 +848,4 @@ If you use Brain-Forge in your research, please cite:
 [⭐ Star this repo](https://github.com/hkevin01/brain-forge) | [🍴 Fork it](https://github.com/hkevin01/brain-forge/fork) | [📝 Contribute](CONTRIBUTING.md)
 
 </div>
-
 
